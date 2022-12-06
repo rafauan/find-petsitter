@@ -81,5 +81,14 @@
     "passwords.sent": "Link z resetowaniem konta został wysłany",
     "Reset Password": "Resetuj hasło",
     "passwords.reset": "Hasło zostało zresetowane",
-    "Login": "Zaloguj"
+    "Login": "Zaloguj",
+    "City Information": "Informacje o mieście",
+    "Update city information.": "Zaktualizuj informacje o mieście.",
+    "City name": "Nazwa miasta",
+    "Country": "Państwo",
+    "Province": "Województwo",
+    "Postal code": "Kod pocztowy",
+    "Cities": "Miasta",
+    "List of cities": "Lista miast",
+    "Map": "Mapa"
 }

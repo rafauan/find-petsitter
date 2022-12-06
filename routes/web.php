@@ -37,6 +37,8 @@ Route::middleware('verified')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('users', 'UserController');
+    Route::resource('cities', 'CityController');
+    Route::resource('services', 'ServiceController');
     // Route::get('/dashboard', [UserController::class, 'index']);
     Route::get('/dashboard', [ProfileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 });
