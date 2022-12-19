@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Mail\AccountVerificationMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class RegisteredUserController extends Controller
 {
@@ -48,16 +49,6 @@ class RegisteredUserController extends Controller
             'status' => 'Draft',
             'role' => 'Petsitter'
         ]);
-
-        // $hash = Hash::make($request->email);
-
-        // $mailData = [
-        //     "name" => $user->name,
-        //     "email" => $user->email,
-        //     "url" => url('/') . "/email/verify/$user->id/$hash"
-        // ];
-
-        // Mail::to($user->email)->send(new AccountVerificationMail($mailData));
 
         event(new Registered($user));
 

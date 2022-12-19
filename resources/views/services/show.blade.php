@@ -69,7 +69,7 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Country') }}
+                    {{ __('Slug') }}
                 </h5>
                 <p>
                     {{ $service->slug }}

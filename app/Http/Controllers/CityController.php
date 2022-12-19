@@ -2,15 +2,10 @@
  
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\City;
-use DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use App\Http\Controllers\RouteServiceProvider;
+
 
 class CityController extends Controller
 {
@@ -47,15 +42,58 @@ class CityController extends Controller
         return view('cities.create'); // -> resources/views/cities/create.blade.php
     }
  
+    // /**
+    //  * Store a newly created resource in storage.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         [
+    //             'name' => ['required', 'string', 'max:255'],
+    //             'country' => ['required', 'string', 'max:255'],
+    //             'province' => ['required', 'string', 'max:255'],
+    //             'zip_code' => ['required', 'string', 'postal_code:PL'],
+    //         ],
+    //         [   
+    //             'name.required' => 'This field \'name\' is provided.',
+    //             'country.required' => 'This field \'country\' is provided.',
+    //             'province.required' => 'This field \'province\' is provided.',
+    //             'zip_code.postal_code:PL' => 'Please try with correct postal code'
+    //             // 'role.required' => 'Password Is Required For Your Information Safety, Thank You.',
+    //             // 'status.required'      => 'Password Length Should Be More Than 8 Character Or Digit Or Mix, Thank You.',
+    //         ]
+    //     ]);
+
+    //     $city = City::create([
+    //         'name' => $request->name,
+    //         'country' => $request->country,
+    //         'province' => $request->province,
+    //         'zip_code' => $request->zip_code
+    //     ]);
+
+    //     // event(new Registered($user));
+
+    //     // Auth::login($user);
+
+    //     // return redirect(RouteServiceProvider::HOME);
+
+    //     return redirect('/cities')->with('success', 'City saved.');   // -> resources/views/cities/index.blade.php
+
+    // }
+ 
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validation for required fields (and using some regex to validate our numeric value)
+        $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
                 'country' => ['required', 'string', 'max:255'],
@@ -63,32 +101,21 @@ class CityController extends Controller
                 'zip_code' => ['required', 'string', 'postal_code:PL'],
             ],
             [   
-                'name.required' => 'This field \'name\' is provided.',
-                'country.required' => 'This field \'country\' is provided.',
-                'province.required' => 'This field \'province\' is provided.',
-                'zip_code.postal_code:PL' => 'Please try with correct postal code'
-                // 'role.required' => 'Password Is Required For Your Information Safety, Thank You.',
-                // 'status.required'      => 'Password Length Should Be More Than 8 Character Or Digit Or Mix, Thank You.',
+                'required' => 'This field cannot be empty',
+                'zip_code.postal_code:PL' => 'Please try with correct postal code',
             ]
-        ]);
+        ); 
 
-        $city = City::create([
-            'name' => $request->name,
-            'country' => $request->country,
-            'province' => $request->province,
-            'zip_code' => $request->zip_code
-        ]);
-
-        // event(new Registered($user));
-
-        // Auth::login($user);
-
-        // return redirect(RouteServiceProvider::HOME);
-
-        return redirect('/cities')->with('success', 'City saved.');   // -> resources/views/cities/index.blade.php
-
-    }
+        $city = new City;
+        $city->name =  $request->get('name');
+        $city->country =  $request->get('country');
+        $city->province = $request->get('province');
+        $city->zip_code = $request->get('zip_code');
+        $city->save();
  
+        return redirect('/cities')->with('success', 'New city created');   // -> resources/views/cities/index.blade.php
+    }    
+
     /**
      * Display the specified resource. We don't need this one for this tutorial.
      *

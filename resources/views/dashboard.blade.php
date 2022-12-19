@@ -43,6 +43,15 @@
 
                         <div class="mb-4">
                             <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                                {{ __('Number of inquiries') }}
+                            </h5>
+                            <p>
+                                {{ count($inquiries) }}
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
                                 {{ __('Newest account') }}
                             </h5>
                             <p>
@@ -58,7 +67,10 @@
                                 {{ __('Newest inquiry') }}
                             </h5>
                             <p>
-                                TODO
+                                <a 
+                                    class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150"
+                                    href="/inquiries/{{ $latestInquiry->id }}">{{ $latestInquiryUser->name }}
+                                </a>
                             </p>
                         </div>
                     </div>

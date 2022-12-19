@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
+use App\Models\Inquiry;
 
 class ProfileController extends Controller
 {
@@ -76,7 +77,10 @@ class ProfileController extends Controller
         return view('dashboard', [
             // 'users' => User::latest()->filter(request(['tag', 'search']))->paginate(4)
             'users' => User::all(),
-            'latestUser' => User::get()->last()
+            'inquiries' => Inquiry::all(),
+            'latestUser' => User::get()->last(),
+            'latestInquiry' => Inquiry::get()->last(),
+            'latestInquiryUser' => User::find(Inquiry::get()->last()->petsitter_id)
         ]);
     }
 }

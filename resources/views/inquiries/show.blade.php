@@ -2,7 +2,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('User') }}
+            {{ __('Inquiry') }}
         </h2>
     </x-slot>
 
@@ -24,7 +24,7 @@
             @endif
 
             <div class="mb-4 flow-root">
-                <a href="{{ route('users.edit', $user->id)}}" class="float-left inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 transition ease-in-out duration-150">
+                <a href="{{ route('inquiries.edit', $inquiry->id)}}" class="float-left inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 transition ease-in-out duration-150">
                     {{ __('Edit') }}
                 </a>
 
@@ -32,10 +32,10 @@
                     x-data=""
                     x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
                     class="float-right"
-                >{{ __('Delete Account') }}</x-danger-button>
+                >{{ __('Delete inquiry') }}</x-danger-button>
             
                 <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                    <form method="post" action="{{ route('users.destroy', $user->id) }}" class="p-6">
+                    <form method="post" action="{{ route('inquiries.destroy', $inquiry->id) }}" class="p-6">
                         @csrf
                         @method('delete')
             
@@ -60,74 +60,104 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Name') }}
+                    {{ __('Service name') }}
                 </h5>
                 <p>
-                    {{ $user->name }}
+                    @php 
+                        $service = App\Models\Service::find($inquiry->service_id);
+                    @endphp 
+                    <a 
+                        class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
+                        href="/services/{{ $service->id }}">{{ $service->name }}
+                    </a>
                 </p>
             </div>
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('E-mail') }}
+                    {{ __('City name') }}
                 </h5>
                 <p>
-                    {{ $user->email }}
+                    @php 
+                        $city = App\Models\City::find($inquiry->city_id);
+                    @endphp 
+                    <a 
+                        class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
+                        href="/cities/{{ $city->id }}">{{ $city->name }}
+                    </a>
                 </p>
             </div>
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Role') }}
+                    {{ __('Weight') }}
                 </h5>
                 <p>
-                    @if ($user->role != null)
-                        {{ __($user->role) }}
-                    @else 
-                        {{ __('Not found') }}
+                    @if($inquiry->weight == '5')
+                        do 5 kg
+                    @elseif($inquiry->weight == '20')
+                        do 20 kg
+                    @elseif($inquiry->weight == '40')
+                        do 40 kg
+                    @elseif($inquiry->weight == '40+')
+                        40kg+
                     @endif
                 </p>
             </div>
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Status') }}
+                    {{ __('Age') }}
                 </h5>
                 <p>
-                    @if ($user->status != null)
-                        {{ __($user->status) }}
-                    @else 
-                        {{ __('Not found') }}
-                    @endif
-                </p>
-            </div>
-
-            <div class="mb-4">
-                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Creation date') }}
-                </h5>
-                <p>
-                    {{ $user->created_at }}
-                </p>
-            </div>
-
-            @if($user->role == 'Petsitter')
-            <div class="mb-4">
-                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Services') }}
-                </h5>
-                @unless(count($services) == 0)
-                    @foreach($services as $service)
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                            {{ $service->name }}
-                        </span>
-                    @endforeach
-
+                    @if($inquiry->age == '>1')
+                        do roku
+                    @elseif($inquiry->age == '<8')
+                        ponad 8
                     @else
-                    <p>{{ __('The user does not have services') }}</p>
-                @endunless
+                        {{ $inquiry->age }}
+                    @endif
+                </p>
             </div>
-            @endif
+
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('Message') }}
+                </h5>
+                <p>
+                    {{ $inquiry->message }}
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('Petsitter') }}
+                </h5>
+                <p>
+                    @php 
+                        $petsitter = App\Models\User::find($inquiry->petsitter_id);
+                    @endphp 
+                    <a 
+                        class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
+                        href="/users/{{ $petsitter->id }}">{{ $petsitter->name }}
+                    </a>    
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('Customer') }}
+                </h5>
+                <p>
+                    @php 
+                        $customer = App\Models\User::find($inquiry->customer_id);
+                    @endphp 
+                    <a 
+                        class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
+                        href="/users/{{ $customer->id }}">{{ $customer->name }}
+                    </a>    
+                </p>
+            </div>
 
         </div>
 

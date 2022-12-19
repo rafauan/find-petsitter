@@ -10,6 +10,7 @@ use App\Models\Service;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\RouteServiceProvider;
+use Illuminate\Support\Str;
 
 class ServiceController extends Controller
 {
@@ -43,39 +44,34 @@ class ServiceController extends Controller
     {
         return view('services.create'); // -> resources/views/services/create.blade.php
     }
- 
+
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validation for required fields (and using some regex to validate our numeric value)
+        $request->validate(
             [
-                'name' => ['required', 'string', 'max:255']
+                'name' => ['required', 'string', 'max:255', 'unique:'.Service::class]
             ],
             [   
-                'name.required' => 'This field \'name\' is provided.',
+                'required' => 'This field cannot be empty',
+                'unique' => 'This service already exists'
             ]
-        ]);
+        ); 
 
-        $service = Service::create([
-            'name' => $request->name,
-            // 'slug' => slugify($request->name)
-        ]);
-
-        // event(new Registered($user));
-
-        // Auth::login($user);
-
-        // return redirect(RouteServiceProvider::HOME);
-
-        return redirect('/services')->with('success', 'Service saved.');   // -> resources/views/cities/index.blade.php
-
-    }
+        $service = new Service;
+        $service->name =  $request->get('name');
+        $service->slug = Str::slug($request->get('name'));
+        $service->save();
  
+        return redirect('/services')->with('success', 'New service created');   // -> resources/views/users/index.blade.php
+    }    
+
     /**
      * Display the specified resource. We don't need this one for this tutorial.
      *
@@ -96,7 +92,7 @@ class ServiceController extends Controller
     public function edit($id)
     {
         $service = Service::find($id);
-        return view('services.edit', compact('services'));  // -> resources/views/cities/edit.blade.php
+        return view('services.edit', compact('service'));  // -> resources/views/cities/edit.blade.php
     }
  
     /**

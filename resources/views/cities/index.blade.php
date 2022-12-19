@@ -6,6 +6,19 @@
         </h2>
     </x-slot>
 
+    @if(session()->get('success'))
+        <div 
+            class="fixed top-0 right-0 m-8 p-4 bg-green-100 text-green-700 rounded-lg shadow-xl" 
+            x-data="{ show: true }" 
+            x-show="show" 
+            x-init="setTimeout(() => show = false, 2000)"
+            role="alert"
+            x-transition.duration.500ms
+        >
+            {{ __(session()->get('success')) }}  
+        </div>
+    @endif
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
     
         <div class="p-4 my-12 sm:p-8 bg-white shadow sm:rounded-lg">

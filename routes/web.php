@@ -39,8 +39,11 @@ Route::middleware('verified')->group(function () {
     Route::resource('users', 'UserController');
     Route::resource('cities', 'CityController');
     Route::resource('services', 'ServiceController');
+    Route::resource('inquiries', 'InquiryController');
     // Route::get('/dashboard', [UserController::class, 'index']);
     Route::get('/dashboard', [ProfileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 });
+
+// Route::resource('search', 'SearchController');
 
 require __DIR__.'/auth.php';

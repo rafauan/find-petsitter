@@ -23,6 +23,29 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
+            <div class="mt-4">
+                <label class="block font-medium text-sm text-gray-700" for="role">{{ __('Account type') }}</label>            
+                <div class="flex justify-left" style="margin-top: 0 !important">
+                    
+                    <select class="form-select appearance-none
+                        block
+                        w-full
+                        text-base
+                        font-normal
+                        text-gray-700
+                        bg-white bg-clip-padding bg-no-repeat
+                        border border-solid border-gray-300
+                        rounded
+                        transition
+                        ease-in-out
+                        focus:text-gray-700 focus:bg-white focus:ring-emerald-700 focus:outline-none" aria-label="role" name="role" id="role" required="required" autofocus="autofocus" autocomplete="role">
+                            <option selected value="Customer">{{ __('Customer') }}</option>
+                            <option value="Petsitter">{{ __('Petsitter') }}</option>
+                    </select>
+                    
+                </div>
+            </div>
+
             <!-- Password -->
             <div class="mt-4">
                 <x-input-label for="password" :value="__('Password')" />

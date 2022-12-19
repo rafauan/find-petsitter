@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
-class Service extends Model
+class Inquiry extends Model
 {
     use HasFactory, Notifiable;
 
@@ -17,7 +17,11 @@ class Service extends Model
      * @var array<string, string>
      */
     protected $fillable = [
-        'name',
-        'slug'
+        'service_id',
+        'city_id',
+        'weight',
+        'age',
+        'petsitter_id',
+        'customer_id'
     ];
 }

@@ -2,22 +2,9 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Users') }}
+            {{ __('Inquiries') }}
         </h2>
     </x-slot>
-
-    @if(session()->get('success'))
-        <div 
-            class="fixed top-0 right-0 m-8 p-4 bg-green-100 text-green-700 rounded-lg shadow-xl" 
-            x-data="{ show: true }" 
-            x-show="show" 
-            x-init="setTimeout(() => show = false, 2000)"
-            role="alert"
-            x-transition.duration.500ms
-        >
-            {{ __(session()->get('success')) }}  
-        </div>
-    @endif
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
     
@@ -25,8 +12,8 @@
             <div class="flex flex-col">
 
                 <div class="flow-root mb-4">
-                    <h2 class="font-semibold float-left align-middle">{{ __('List of users') }}</h2>
-                    <a href="{{ route('users.create')}}" class="float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <h2 class="font-semibold float-left align-middle">{{ __('List of inquiries') }}</h2>
+                    <a href="{{ route('inquiries.create')}}" class="float-right inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 transition ease-in-out duration-150">
                         {{ __('Create') }}
                     </a>
                 </div>
@@ -63,16 +50,25 @@
                                     {{ __('ID') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
-                                    {{ __('User') }}
+                                    {{ __('Service') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
-                                    {{ __('E-mail') }}
+                                    {{ __('City') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
-                                    {{ __('Role') }}
+                                    {{ __('Weight') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
-                                    {{ __('Status') }}
+                                    {{ __('Age') }}
+                                </th>
+                                <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
+                                    {{ __('Message') }}
+                                </th>
+                                <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
+                                    {{ __('Petsitter') }}
+                                </th>
+                                <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
+                                    {{ __('Customer') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
                                     {{ __('Creation date') }}
@@ -80,26 +76,65 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @unless(count($users) == 0)
-                        @foreach($users as $user)
-                            <tr class="border-b hover:bg-gray-200 cursor-pointer transition ease-in-out duration-150" onclick="window.location='/users/{{ $user->id }}'">
+                        @unless(count($inquiries) == 0)
+                        @foreach($inquiries as $inquiry)
+                            <tr class="border-b hover:bg-gray-200 cursor-pointer transition ease-in-out duration-150" onclick="window.location='/inquiries/{{ $inquiry->id }}'">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {{ $user->id }}
+                                    {{ $inquiry->id }}
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {{ $user->name }}
+                                    @php 
+                                        $service = App\Models\Service::find($inquiry->service_id);
+                                    @endphp 
+
+                                    {{ $service->name }}
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {{ $user->email }}
+                                    @php 
+                                        $city = App\Models\City::find($inquiry->city_id);
+                                    @endphp 
+
+                                    {{ $city->name }}
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {{ __($user->role) }}
+                                    @if($inquiry->weight == '5')
+                                        do 5 kg
+                                    @elseif($inquiry->weight == '20')
+                                        do 20 kg
+                                    @elseif($inquiry->weight == '40')
+                                        do 40 kg
+                                    @elseif($inquiry->weight == '40+')
+                                        40kg+
+                                    @endif
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {{ __($user->status) }}
+                                    @if($inquiry->age == '>1')
+                                        do roku
+                                    @elseif($inquiry->age == '<8')
+                                        ponad 8
+                                    @else
+                                        {{ $inquiry->age }}
+                                    @endif
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {{ $user->created_at }}
+                                    {{ $inquiry->message }}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    @php 
+                                        $petsitter = App\Models\User::find($inquiry->petsitter_id);
+                                    @endphp 
+
+                                    {{ $petsitter->name }}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    @php 
+                                        $customer = App\Models\User::find($inquiry->customer_id);
+                                    @endphp 
+
+                                    {{ $customer->name }}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    {{ $inquiry->created_at }}
                                 </td>
                             </tr>
                         @endforeach
@@ -111,7 +146,7 @@
                         </tbody>
 
                         <div>
-                            {{ $users->withQueryString()->links() }}
+                            {{ $inquiries->withQueryString()->links() }}
                         </div>
                     </table>
                     </div>

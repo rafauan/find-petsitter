@@ -6,7 +6,10 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Auth\Events\Registered;
 use App\Models\User;
+use App\Models\Service;
+use App\Models\PetsitterServices;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\RouteServiceProvider;
@@ -41,54 +44,57 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create'); // -> resources/views/stocks/create.blade.php
+        return view('users.create', [
+            'services' => Service::all()
+        ]); // -> resources/views/users/create.blade.php
     }
  
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validation for required fields (and using some regex to validate our numeric value)
+        $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'role' => 'required',
                 'status' => 'required',
-                // 'value'=>'required|max:10|regex:/^-?[0-9]+(?:\.[0-9]{1,2})?$/'
             ],
             [   
-                'name.required' => 'Please Provide Your Email Address For Better Communication, Thank You.',
-                'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one.',
-                'email.email' => 'Please try with correct email address'
-                // 'role.required' => 'Password Is Required For Your Information Safety, Thank You.',
-                // 'status.required'      => 'Password Length Should Be More Than 8 Character Or Digit Or Mix, Thank You.',
+                'required' => 'This field cannot be empty',
+                'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one',
+                'email.email' => 'Please try with correct email address',
+                'password.min' => 'The minimum number of characters is 8'
             ]
-        ]);
+        ); 
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            // 'email_verified_at' => date('Y-m-d H:i:s'),
-            'email_verified_at' => '2022-11-30 09:25:34',
-            'role' => $request->role,
-            'status' => $request->status,
-        ]);
+        $user = new User;
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('password'));
+        $user->role = $request->get('role');
+        $user->status = $request->get('status');
+        $user->save();
 
-        // event(new Registered($user));
+        $services = $request->get('services');
 
-        // Auth::login($user);
+        if($user->role == 'Petsitter' && $services) {
+            foreach($services as $service) {
+                $inquiry_petsitter = new PetsitterServices;
+                $inquiry_petsitter->petsitter_id = $user->id;
+                $inquiry_petsitter->service_id = $service;
+                $inquiry_petsitter->save();
+            }
+        }
 
-        // return redirect(RouteServiceProvider::HOME);
-
-        return redirect('/users')->with('success', 'User saved.');   // -> resources/views/stocks/index.blade.php
-
-    }
+        return redirect('/users')->with('success', 'New user created');   // -> resources/views/users/index.blade.php
+    }    
  
     /**
      * Display the specified resource. We don't need this one for this tutorial.
@@ -98,7 +104,17 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('users.show', ['user' => User::find($id)]);
+        $petsitter_services = PetsitterServices::where('petsitter_id', $id)->get();
+
+        $service_ids = $petsitter_services->pluck('service_id')->toArray();
+
+        $services = Service::whereIn('id', $service_ids)->get();
+
+        return view('users.show', [
+            'user' => User::find($id),
+            'petsitter_services' => $petsitter_services,
+            'services' => $services
+        ]);
     }
  
     /**
@@ -109,10 +125,23 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        return view('users.edit', compact('user'));  // -> resources/views/stocks/edit.blade.php
+        $petsitter_services = PetsitterServices::where('petsitter_id', $id)->get();
+
+        $service_ids = $petsitter_services->pluck('service_id')->toArray();
+
+        $user_services = Service::whereIn('id', $service_ids)->get();
+
+        $services = Service::all();
+
+        $services = $services->diff($user_services);
+
+        return view('users.edit', [
+            'services' => $services,
+            'user' => User::find($id),
+            'user_services' => $user_services
+        ]); // -> resources/views/stocks/edit.blade.php
     }
- 
+
     /**
      * Update the specified resource in storage.
      *
@@ -122,34 +151,49 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
+
         // Validation for required fields (and using some regex to validate our numeric value)
         $request->validate(
-        [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'role' => 'required',
-            'status' => 'required',
-            // 'value'=>'required|max:10|regex:/^-?[0-9]+(?:\.[0-9]{1,2})?$/'
-        ],
-        [   
-            'name.required' => 'Please Provide Your Email Address For Better Communication, Thank You.',
-            'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one.',
-            'email.email' => 'Please try with correct email address'
-            // 'role.required' => 'Password Is Required For Your Information Safety, Thank You.',
-            // 'status.required'      => 'Password Length Should Be More Than 8 Character Or Digit Or Mix, Thank You.',
-        ]
+            [
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'role' => 'required',
+                'status' => 'required'
+            ],
+            [   
+                'name.required' => 'Please Provide Your Email Address For Better Communication, Thank You',
+                'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one',
+                'email.email' => 'Please try with correct email address'
+            ]
         ); 
-
-        $user = User::find($id);
 
         $user->name =  $request->get('name');
         $user->email = $request->get('email');
         $user->role = $request->get('role');
         $user->status = $request->get('status');
         $user->save();
+
+        $services = $request->get('services');
+        $user_services = $request->get('user_services');
+
+        if($user->role == 'Petsitter' && $services) {
+            foreach($services as $service) {
+                $petsitter_service = new PetsitterServices;
+                $petsitter_service->petsitter_id = $user->id;
+                $petsitter_service->service_id = $service;
+                $petsitter_service->save();
+            }
+        }
+
+        if($user->role == 'Petsitter' && $user_services) {
+            foreach($user_services as $user_service) {
+                $petsitter_service = PetsitterServices::where('petsitter_id', $user->id)->where('service_id', $user_service)->get();
+                $petsitter_service->each->delete();
+            }
+        }
  
-        return redirect()->route('users.show', ['user' => User::find($id)])->with('success', __('User updated.'));
-        // return view('users.show', ['user' => User::find($id)]);
+        return redirect()->route('users.show', ['user' => User::find($id)])->with('success', __('User updated'));
     }
  
     /**
@@ -163,6 +207,6 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete(); // Easy right?
  
-        return redirect('/dashboard')->with('success', 'User removed.');
+        return redirect('/dashboard')->with('success', 'User removed');
     } 
 }
