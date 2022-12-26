@@ -18,7 +18,7 @@
             {{ __('User Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 mb-4 text-sm text-gray-600">
             {{ __("Update user information.") }}
         </p>
     </header>
@@ -26,6 +26,7 @@
         <form 
             method="post" 
             action="{{ route('users.update', $user->id) }}"
+            enctype="multipart/form-data"
             @if($user->role == 'Petsitter')
                 x-data="{ showService: true }" @change="if (event.target.id === 'role') { if (event.target.value === 'Petsitter') { showService = true } else { showService = false } }
             @else 
@@ -34,6 +35,42 @@
         ">        
         @method('PATCH') 
         @csrf
+
+        <div class="mt-2">
+                @if($profile_image_url != null)
+                    <img 
+                        class="w-24 h-24 rounded-full mb-4" 
+                        style="object-fit:cover;" 
+                        src="{{ Storage::url($profile_image_url) }}" 
+                        alt="Profile picture"
+                    >
+
+                    <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image_id">{{ __('Change image') }}</label>
+                @else 
+                    <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image_id">{{ __('Profile picture') }}</label>
+
+                    <img 
+                        class="w-24 h-24 rounded-full mb-4" 
+                        style="object-fit:cover;" 
+                        src="https://images.unsplash.com/photo-1558203728-00f45181dd84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2674&q=80" 
+                        alt="Profile picture"
+                    >
+                @endif
+
+                <input type="file" class="text-sm text-grey-500 outline-none
+                    file:mr-5 file:py-2 file:px-6
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-emerald-700 file:text-white
+                    hover:file:cursor-pointer hover:file:bg-emerald-600
+                    hover:file:text-white file:transition file:ease-in-out file:duration-150
+                    "
+                    type="file"
+                    name="profile_image"
+                    id="profile_image"
+                />
+        </div>
+        
         <div class="mt-2">
             <label class="block font-medium text-sm text-gray-700" for="name">{{ __('Name') }}</label>            
             <input class="border-gray-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-md shadow-sm mt-1 block w-full" id="name" name="name" type="text" value="{{ $user->name }}" required="required" autofocus="autofocus" autocomplete="name">
@@ -131,6 +168,20 @@
             </div>
         </div>
 
+        <div class="mt-2">
+            <label for="city_id" class="block font-medium text-sm text-gray-700">{{ __('City') }}</label>
+            <select id="city_id" class="
+                bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
+                aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
+            >
+                {{-- <option value="{{ $city->id }}" selected>{{ $city->name }}</option> --}}
+                @foreach ($cities as $city)
+                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
+        </div>
+
         <div class="mt-2" x-show="showService">
             <p class="block my-2 text-sm font-medium text-gray-900">{{ __('Services') }}</p>
             <fieldset class="flex flex-wrap gap-3">
@@ -171,7 +222,39 @@
             </fieldset>
         </div>
 
+        <div class="mt-2">
+            <label for="profile_description" class="block font-medium text-sm text-gray-700">{{ __('Message') }}</label>
+            <textarea
+                class="
+                    form-control
+                    block
+                    w-full
+                    px-3
+                    text-base
+                    font-normal
+                    text-gray-700
+                    bg-white bg-clip-padding
+                    border border-solid border-gray-300
+                    rounded
+                    transition
+                    ease-in-out
+                    m-0
+                    focus:text-gray-700 focus:bg-white focus:border-emerald-700 focus:outline-none
+                "
+                name="profile_description"
+                id="profile_description"
+                rows="3"
+                required="required"
+                placeholder="{{__('Profile description')}}"
+            >{{ $user->profile_description }}</textarea>
+            <x-input-error :messages="$errors->get('profile_description')" class="mt-2" />
+        </div>
+
         <div class="mt-4">
+            <a href="/users/{{ $user->id }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                {{ __('Cancel') }}
+            </a>
+
             <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2 transition ease-in-out duration-150">
                 {{ __('Save') }}
             </button>

@@ -2,26 +2,6 @@
 
 @section('content')
 
-{{-- <header>
-    <!-- Background image -->
-    <div class="relative overflow-hidden bg-no-repeat bg-cover" style="
-      background-position: 50%;
-      background-image: url('https://images.unsplash.com/photo-1581888227599-779811939961?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80');
-      height: 300px;
-    ">
-      <div class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
-        style="background-color: rgba(37, 37, 37, 0.75)">
-        <div class="flex justify-center items-center h-full">
-          <div class="text-center text-white px-6 md:px-12">
-            <h1 class="text-5xl font-semibold mt-0 mb-3">Znajdź opiekuna</h1>
-            <p>Wyślij zapytanie wśród 134 opiekunów</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Background image -->
-</header> --}}
-
 <section class="bg-white">
     <div class="lg:grid lg:min-h-screen lg:grid-cols-12">
       <aside
@@ -65,23 +45,21 @@
             opiekuna.
           </p>
   
-          <form>       
+          <form method="post" action="{{ route('search.find') }}" >       
             <div>
-                <label for="countries" class="block mt-4 mb-2 text-sm font-medium text-gray-900">Wybierz miasto</label>
-                <select id="countries" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5">
-                  <option selected>Miasto</option>
-                  <option value="US">Gdynia</option>
-                  <option value="CA">Gdańsk</option>
-                  <option value="FR">Warszawa</option>
-                  <option value="DE">Wrocław</option>
-                  <option value="DE">Łódź</option>
-                  <option value="DE">Kraków</option>
-                  <option value="DE">Białystok</option>
-                  <option value="DE">Lublin</option>
+                <label for="city_id" class="block font-medium text-sm text-gray-700">{{ __('City') }}</label>
+                <select id="city_id" class="
+                    bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
+                    aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
+                >
+                    @foreach ($cities as $city)
+                        <option value="{{ $city->id }}">{{ $city->name }}</option>
+                    @endforeach
                 </select>
+                <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
             </div>
-    
-            <div>
+
+            {{-- <div>
                 <p class="block my-2 text-sm font-medium text-gray-900">Waga psa</p>
                 <fieldset class="flex flex-wrap gap-3">
                     <legend class="sr-only">Waga</legend>
@@ -156,20 +134,19 @@
                     </div>
                   </fieldset>
                   
-            </div>
+            </div> --}}
     
             <div class="my-2">
                 <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Wybierz usługę</label>
                 <select id="countries" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5">
-                    <option selected>Usługa</option>
-                    <option value="US">Szkolenie</option>
-                    <option value="CA">Wyprowadzanie</option>
-                    <option value="FR">Opieka dzienna</option>
-                    <option value="DE">Konsultacja behawioralna</option>
-                  </select>
+                    @foreach ($services as $service)
+                        <option value="{{ $service->id }}">{{ $service->name }}</option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('service_id')" class="mt-2" />
             </div>
     
-            <div class="my-2">
+            {{-- <div class="my-2">
                 <p class="block my-2 text-sm font-medium text-gray-900">Wiek psa</p>
                 <fieldset class="flex flex-wrap gap-3">
                     <legend class="sr-only">Waga</legend>
@@ -244,7 +221,7 @@
                     </div>
                   </fieldset>
                   
-            </div>
+            </div> --}}
 
             <div class="my-4">
                 <button class="w-full block rounded-md bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-600">

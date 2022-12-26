@@ -23,9 +23,28 @@
     <form 
         method="post" 
         action="{{ route('users.store') }}" 
+        enctype="multipart/form-data"
         x-data="{ showService: false }" @change="if (event.target.id === 'role') { if (event.target.value === 'Petsitter') { showService = true } else { showService = false } }"
     >
         @csrf
+
+        <!-- Profile image -->
+        <div class="mt-4 mb-4">
+            <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image">{{ __('Profile picture') }}</label>
+            <input type="file" class="text-sm text-grey-500 outline-none
+                file:mr-5 file:py-2 file:px-6
+                file:rounded-full file:border-0
+                file:text-sm file:font-medium
+                file:bg-emerald-700 file:text-white
+                hover:file:cursor-pointer hover:file:bg-emerald-600
+                hover:file:text-white file:transition file:ease-in-out file:duration-150
+                "
+                type="file"
+                name="profile_image"
+                id="profile_image"
+            />
+    </div>
+
         <!-- Full name -->
         <div class="mt-2">    
             <label for="name" class="block font-medium text-sm text-gray-700">{{ __('Full name') }}</label>
@@ -117,6 +136,50 @@
                 </div>
                 @endforeach
               </fieldset>
+        </div>
+
+        <!-- City -->
+        <div class="mt-2">
+            <label for="city_id" class="block font-medium text-sm text-gray-700">{{ __('City') }}</label>
+            <select id="city_id" class="
+                bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
+                aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
+            >
+                {{-- <option value="{{ $city->id }}" selected>{{ $city->name }}</option> --}}
+                @foreach ($cities as $city)
+                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
+        </div>
+
+        <!-- Profile description -->
+        <div class="mt-2">
+            <label for="profile_description" class="block font-medium text-sm text-gray-700 mb-1">{{ __('Message') }}</label>
+            <textarea
+                class="
+                    form-control
+                    block
+                    w-full
+                    px-3
+                    text-base
+                    font-normal
+                    text-gray-700
+                    bg-white bg-clip-padding
+                    border border-solid border-gray-300
+                    rounded
+                    transition
+                    ease-in-out
+                    m-0
+                    focus:text-gray-700 focus:bg-white focus:border-emerald-700 focus:outline-none
+                "
+                name="profile_description"
+                id="profile_description"
+                rows="3"
+                required="required"
+                placeholder="{{__('Profile description')}}"
+            >{{ __('Your account description') }}</textarea>
+            <x-input-error :messages="$errors->get('profile_description')" class="mt-2" />
         </div>
 
         <!-- Password -->

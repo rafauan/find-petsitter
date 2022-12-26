@@ -65,7 +65,7 @@
     "System information": "Informacje o systemie",
     "Number of accounts": "Liczba wszystkich kont",
     "Newest account": "Ostatnio utworzone konto",
-    "Newest inquiry": "Najnowsze zapytanie",
+    "Newest inquiries": "Najnowsze zapytania",
     "Sorry, this email address is already used by another user. Please try with different one": "Przepraszamy, ten adres e-mail jest używany przez innego użytkownika. Proszę wprowadzić inny",
     "Please try with correct email address": "Proszę wprowadzić prawidłowy adres e-mail",
     "First name and last name": "Imię i nazwisko",
@@ -132,5 +132,17 @@
     "Number of inquiries": "Liczba wszystkich zapytań",
     "Select role": "Wybierz rolę",
     "Select status": "Wybierz status",
-    "The user does not have services": "Użytkownik nie posiada usług"
+    "The user does not have services": "Użytkownik nie posiada usług",
+    "City not selected": "Miasto nie zostało wybrane",
+    "Profile picture": "Zdjęcie profilowe",
+    "Change image": "Zmień zdjęcie",
+    "Profile description": "Opis profilu",
+    "Your account description": "Opis twojego profilu",
+    "Opinions": "Opinie",
+    "List of opinions": "Lista opinii",
+    "Text": "Tekst",
+    "Score": "Wynik",
+    "Opinion - new": "Opinia - nowa",
+    "Create a new opinion": "Utwórz nową opinie",
+    "Your text": "Twój tekst"
 }

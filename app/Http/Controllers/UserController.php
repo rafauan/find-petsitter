@@ -2,17 +2,15 @@
  
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Auth\Events\Registered;
 use App\Models\User;
 use App\Models\Service;
+use App\Models\City;
 use App\Models\PetsitterServices;
+use App\Models\ProfileImage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use App\Http\Controllers\RouteServiceProvider;
+
 
 class UserController extends Controller
 {
@@ -45,7 +43,8 @@ class UserController extends Controller
     public function create()
     {
         return view('users.create', [
-            'services' => Service::all()
+            'services' => Service::all(),
+            'cities' => City::all()
         ]); // -> resources/views/users/create.blade.php
     }
  
@@ -80,7 +79,28 @@ class UserController extends Controller
         $user->password = Hash::make($request->get('password'));
         $user->role = $request->get('role');
         $user->status = $request->get('status');
+        $user->city_id = $request->get('city_id');
+        $user->profile_description = $request->get('profile_description');
         $user->save();
+
+        $profile_image_file = $request->file('profile_image');
+
+        if($profile_image_file != null) {
+            $file_path = $profile_image_file->storeAs('public/profile_images', 'profile_picture-' . $user->id . '.jpg');
+            $file_name = $request->file('profile_image')->getClientOriginalName();
+
+            $existing_profile_image = ProfileImage::where('user_id', $user->id)->first();
+
+            if($existing_profile_image) {
+                $existing_profile_image->delete();
+            }
+    
+            $profile_image = new ProfileImage;
+            $profile_image->name = $file_name;
+            $profile_image->path = $file_path;
+            $profile_image->user_id = $user->id;
+            $profile_image->save();
+        }
 
         $services = $request->get('services');
 
@@ -110,10 +130,24 @@ class UserController extends Controller
 
         $services = Service::whereIn('id', $service_ids)->get();
 
+        $user = User::find($id);
+
+        $city = City::find($user->city_id);
+
+        $profile_image = ProfileImage::where('user_id', $user->id)->first();
+
+        if($profile_image) {
+            $profile_image_path = $profile_image->path;
+        } else {
+            $profile_image_path = null;
+        }
+
         return view('users.show', [
-            'user' => User::find($id),
+            'user' => $user,
+            'city' => $city,
             'petsitter_services' => $petsitter_services,
-            'services' => $services
+            'services' => $services,
+            'profile_image_url' => $profile_image_path
         ]);
     }
  
@@ -135,10 +169,22 @@ class UserController extends Controller
 
         $services = $services->diff($user_services);
 
+        $cities = City::all();
+
+        $profile_image = ProfileImage::where('user_id', $id)->first();
+
+        if($profile_image) {
+            $profile_image_path = $profile_image->path;
+        } else {
+            $profile_image_path = null;
+        }
+
         return view('users.edit', [
             'services' => $services,
             'user' => User::find($id),
-            'user_services' => $user_services
+            'user_services' => $user_services,
+            'cities' => $cities,
+            'profile_image_url' => $profile_image_path
         ]); // -> resources/views/stocks/edit.blade.php
     }
 
@@ -159,7 +205,8 @@ class UserController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email,' . $user->id,
                 'role' => 'required',
-                'status' => 'required'
+                'status' => 'required',
+                // 'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
             ],
             [   
                 'name.required' => 'Please Provide Your Email Address For Better Communication, Thank You',
@@ -168,11 +215,32 @@ class UserController extends Controller
             ]
         ); 
 
-        $user->name =  $request->get('name');
+        $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->role = $request->get('role');
         $user->status = $request->get('status');
+        $user->city_id = $request->get('city_id');
+        $user->profile_description = $request->get('profile_description');
         $user->save();
+
+        $profile_image_file = $request->file('profile_image');
+
+        if($profile_image_file != null) {
+            $file_path = $profile_image_file->storeAs('public/profile_images', 'profile_picture-' . $user->id . '.jpg');
+            $file_name = $request->file('profile_image')->getClientOriginalName();
+
+            $existing_profile_image = ProfileImage::where('user_id', $user->id)->first();
+
+            if($existing_profile_image) {
+                $existing_profile_image->delete();
+            }
+    
+            $profile_image = new ProfileImage;
+            $profile_image->name = $file_name;
+            $profile_image->path = $file_path;
+            $profile_image->user_id = $user->id;
+            $profile_image->save();
+        }
 
         $services = $request->get('services');
         $user_services = $request->get('user_services');

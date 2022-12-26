@@ -45,7 +45,7 @@
             </p>
         </div>
 
-        <div>
+        {{-- <div>
             <p class="text-2xl font-bold">Galeria zdjęć</p>
             <section class="overflow-hidden text-gray-700">
                 <div class="container py-2">
@@ -89,7 +89,7 @@
                   </div>
                 </div>
               </section>
-        </div>
+        </div> --}}
 
         <div class="pt-4">
             <p class="text-2xl font-bold">Usługi</p>

@@ -79,7 +79,7 @@ class ProfileController extends Controller
             'users' => User::all(),
             'inquiries' => Inquiry::all(),
             'latestUser' => User::get()->last(),
-            'latestInquiry' => Inquiry::get()->last(),
+            'latestInquiries' => Inquiry::latest()->take(5)->get(),
             'latestInquiryUser' => User::find(Inquiry::get()->last()->petsitter_id)
         ]);
     }

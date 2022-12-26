@@ -60,6 +60,27 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('Profile picture') }}
+                </h5>
+                @if($profile_image_url != null) 
+                    <img 
+                        class="w-24 h-24 rounded-full" 
+                        style="object-fit:cover;" 
+                        src="{{ Storage::url($profile_image_url) }}" 
+                        alt="Profile picture"
+                    >
+                @else
+                    <img 
+                        class="w-24 h-24 rounded-full" 
+                        style="object-fit:cover;" 
+                        src="https://images.unsplash.com/photo-1558203728-00f45181dd84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2674&q=80" 
+                        alt="Profile picture"
+                    >
+                @endif
+            </div>
+
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
                     {{ __('Name') }}
                 </h5>
                 <p>
@@ -104,6 +125,26 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('City') }}
+                </h5>
+
+                @if($city !== null)
+                <a 
+                    class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
+                    href="/cities/{{ $city->id }}">{{ $city->name }}
+                </a>
+
+                @else 
+
+                    <p class="text-neutral-400 italic">
+                        {{ __('City not selected') }}
+                    </p>
+
+                @endif
+            </div>
+
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
                     {{ __('Creation date') }}
                 </h5>
                 <p>
@@ -124,10 +165,21 @@
                     @endforeach
 
                     @else
-                    <p>{{ __('The user does not have services') }}</p>
+                    <p class="text-neutral-400 italic">
+                        {{ __('The user does not have services') }}
+                    </p>
                 @endunless
             </div>
             @endif
+
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('Profile description') }}
+                </h5>
+                <p>
+                    {{ $user->profile_description }}
+                </p>
+            </div>
 
         </div>
 

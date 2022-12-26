@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -32,14 +33,18 @@ Route::get('/petsitter', function () {
     return view('website.petsitter_profile');
 });
 
+Route::get('/search', [SearchController::class, 'search'])->name('search.search');
+
 Route::middleware('verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::resource('users', 'UserController');
     Route::resource('cities', 'CityController');
     Route::resource('services', 'ServiceController');
     Route::resource('inquiries', 'InquiryController');
+    Route::resource('opinions', 'OpinionController');
     // Route::get('/dashboard', [UserController::class, 'index']);
     Route::get('/dashboard', [ProfileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 });

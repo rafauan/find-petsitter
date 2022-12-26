@@ -19,17 +19,21 @@ class InquiryController extends Controller
      */
     public function index(Request $request)
     {
+        // $inquiry = Inquiry::with('service')->first();
+
         if($request->filled('search')) {
             $search = $request->input('search');
 
             $inquiries = Inquiry::query()
-                ->where('service_id', 'LIKE', "%{$search}%")
-                ->orWhere('city_id', 'LIKE', "%{$search}%")
-                ->orWhere('weight', 'LIKE', "%{$search}%")
-                ->orWhere('age', 'LIKE', "%{$search}%")
-                ->orWhere('petsitter_id', 'LIKE', "%{$search}%")
-                ->orWhere('customer_id', 'LIKE', "%{$search}%")
+                ->join('services', 'inquiries.service_id', '=', 'services.id')
+                ->join('cities', 'inquiries.city_id', '=', 'cities.id')
+                ->join('users', 'inquiries.petsitter_id', '=', 'users.id')
+                ->select('inquiries.*')
+                ->where('services.name', 'LIKE', "%{$search}%")
+                ->orWhere('cities.name', 'LIKE', "%{$search}%")
+                ->orWhere('users.name', 'LIKE', "%{$search}%")
                 ->paginate(10);
+
         } else {
             $inquiries = Inquiry::paginate(10);
         }
