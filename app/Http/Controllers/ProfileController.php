@@ -74,6 +74,12 @@ class ProfileController extends Controller
      * @return \Illuminate\View\View
      */
     public function index(Request $request) {
+
+        // $user = User::all();
+        // $inquiries = Inquiry::all();
+        // $latestUser = User::get()->last();
+        // $latestInquiries = Inquiry::latest()->take(5)->get();
+
         return view('dashboard', [
             // 'users' => User::latest()->filter(request(['tag', 'search']))->paginate(4)
             'users' => User::all(),

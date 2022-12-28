@@ -60,48 +60,10 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Service name') }}
-                </h5>
-                <p>
-                    @php 
-                        $petsitter = App\Models\Service::find($opinion->petsitter_id);
-                    @endphp 
-                    <a 
-                        class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
-                        href="/users/{{ $petsitter->id }}">{{ $petsitter->name }}
-                    </a>
-                </p>
-            </div>
-
-            <div class="mb-4">
-                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
                     {{ __('Score') }}
                 </h5>
                 <p>
-                    @if($inquiry->score == '5')
-                        do 5 kg
-                    @elseif($inquiry->score == '20')
-                        do 20 kg
-                    @elseif($inquiry->score == '40')
-                        do 40 kg
-                    @elseif($inquiry->score == '40+')
-                        40kg+
-                    @endif
-                </p>
-            </div>
-
-            <div class="mb-4">
-                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Age') }}
-                </h5>
-                <p>
-                    @if($inquiry->age == '>1')
-                        do roku
-                    @elseif($inquiry->age == '<8')
-                        ponad 8
-                    @else
-                        {{ $inquiry->age }}
-                    @endif
+                    {{ $opinion->score }}
                 </p>
             </div>
 
@@ -110,7 +72,7 @@
                     {{ __('Message') }}
                 </h5>
                 <p>
-                    {{ $inquiry->message }}
+                    {{ $opinion->text }}
                 </p>
             </div>
 
@@ -120,7 +82,7 @@
                 </h5>
                 <p>
                     @php 
-                        $petsitter = App\Models\User::find($inquiry->petsitter_id);
+                        $petsitter = App\Models\User::find($opinion->petsitter_id);
                     @endphp 
                     <a 
                         class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
@@ -135,7 +97,7 @@
                 </h5>
                 <p>
                     @php 
-                        $customer = App\Models\User::find($inquiry->customer_id);
+                        $customer = App\Models\User::find($opinion->customer_id);
                     @endphp 
                     <a 
                         class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"

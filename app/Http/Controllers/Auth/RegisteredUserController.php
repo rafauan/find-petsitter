@@ -13,7 +13,7 @@ use Illuminate\Validation\Rules;
 use App\Mail\AccountVerificationMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
-
+use App\Models\City;
 class RegisteredUserController extends Controller
 {
     /**
@@ -23,7 +23,9 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        $cities = City::all();
+        // return view('auth.register');
+        return view('auth.register', compact('cities'));
     }
 
     /**
@@ -36,18 +38,27 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'role' => ['required'],
+                'city_id' => ['required']
+            ],
+            [   
+                'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one',
+                'password.min' => 'The minimum number of characters is 8'
+            ]
+        );
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'status' => 'Draft',
-            'role' => 'Petsitter'
+            'role' => $request->role,
+            'city_id' => $request->city_id
         ]);
 
         event(new Registered($user));

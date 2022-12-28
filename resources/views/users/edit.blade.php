@@ -52,7 +52,7 @@
                     <img 
                         class="w-24 h-24 rounded-full mb-4" 
                         style="object-fit:cover;" 
-                        src="https://images.unsplash.com/photo-1558203728-00f45181dd84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2674&q=80" 
+                        src="{{ Storage::url('public/profile_images/blank_profile_picture.png') }}" 
                         alt="Profile picture"
                     >
                 @endif
@@ -223,7 +223,7 @@
         </div>
 
         <div class="mt-2">
-            <label for="profile_description" class="block font-medium text-sm text-gray-700">{{ __('Message') }}</label>
+            <label for="profile_description" class="block font-medium text-sm text-gray-700">{{ __('Profile description') }}</label>
             <textarea
                 class="
                     form-control
