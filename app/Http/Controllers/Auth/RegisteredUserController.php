@@ -14,6 +14,7 @@ use App\Mail\AccountVerificationMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use App\Models\City;
+use App\Mail\NewUserMail;
 class RegisteredUserController extends Controller
 {
     /**
@@ -62,6 +63,12 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        $admins = User::where('role', 'Admin')->get();
+
+        foreach($admins as $admin) {
+            Mail::to($admin->email)->send(new NewUserMail($user->name, $user->email, $user->id, $user->role));
+        }
 
         Auth::login($user);
 

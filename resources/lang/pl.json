@@ -157,5 +157,11 @@
     "Reset Password Notification": "Powiadomienie o zresetowaniu hasła",
     "You are receiving this email because we received a password reset request for your account.": "Otrzymujesz tę wiadomość e-mail, ponieważ otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta.",
     "If you did not request a password reset, no further action is required.": "Jeśli nie zażądałeś zresetowania hasła, nie są wymagane żadne dalsze działania.",
-    "This password reset link will expire in :count minutes.": "Ten link resetujący hasło wygaśnie za :count minut."
+    "This password reset link will expire in :count minutes.": "Ten link resetujący hasło wygaśnie za :count minut.",
+    "Your account is awaiting Admin approval.": "Twoje konto oczekuje na zatwierdzenie przez administratora.",
+    "When your account is approved we will inform you in an email and your account will appear in the search engine.": "Gdy Twoje konto zostanie zatwierdzone poinformujemy Cię o tym w mailu, a Twoje konto pojawi się w wyszukiwarce.",
+    "Complete the details in your profile.": "Uzupełnij dane na swoim profilu.",
+    "To create a better petsitter profile add the services performed, profile photo and profile description.": "Aby stworzyć lepszy profil opiekuna dodaj wykonywane usługi, zdjęcie profilowe oraz opis profilu.",
+    "You can edit the data": "Możesz edytować dane",
+    "at this link.": "pod tym linkiem."
 }

@@ -32,6 +32,8 @@
                 <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="overflow-hidden">
+
+                        @if(Auth::user()->role == 'Admin')
                         <section class="text-gray-600 body-font">
                             <div class="container px-5 py-12 mx-auto">
                               <div class="flex flex-wrap -m-4 text-center">
@@ -62,7 +64,7 @@
                                 </h5>
                                 <p>
                                     <a 
-                                        class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150"
+                                        class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150 text-neutral-500"
                                         href="/users/{{ $latestUser->id }}">{{ $latestUser->email }}
                                     </a>
                                 </p>
@@ -76,7 +78,7 @@
                                     @unless(count($latestInquiries) == 0)
                                         @foreach($latestInquiries as $latestInquiry)
                                         <a 
-                                            class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150"
+                                            class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150 text-neutral-500"
                                             href="/inquiries/{{ $latestInquiry->id }}">{{ $latestInquiryUser->name }}
                                         </a>
                                         <br/>
@@ -92,6 +94,33 @@
                                 </p>
                             </div> 
                           </section>
+                        @endif
+
+                        @if(Auth::user()->role == 'Petsitter')
+
+                            @if(Auth::user()->status == 'Draft')
+                            <div class="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 mt-6" role="alert">
+                                <p class="font-bold">{{ __('Your account is awaiting Admin approval.') }}</p>
+                                <p>{{ __('When your account is approved we will inform you in an email and your account will appear in the search engine.') }}</p>
+                            </div>
+                            @endif
+
+                            <div class="bg-yellow-100 border-t-4 border-yellow-500 rounded-b text-yellow-900 px-4 py-3 shadow-md mt-6" role="alert">
+                                <div class="flex">
+                                  <div class="py-1"><svg class="fill-current h-6 w-6 text-yellow-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                                  <div>
+                                    <p class="font-bold">{{ __('Complete the details in your profile.') }}</p>
+                                    <p class="text-sm">{{ __('To create a better petsitter profile add the services performed, profile photo and profile description.') }}</p>
+                                    <p class="text-sm">
+                                        {{ __('You can edit the data') }} 
+                                        <a href="{{ url('/profile') }}" class="font-bold hover:opacity-75 transition ease-in-out duration-150">
+                                            {{ __('at this link.') }}
+                                        </a>
+                                    </p>
+                                  </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 </div>

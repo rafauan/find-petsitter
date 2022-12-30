@@ -38,6 +38,7 @@ Route::get('/search', [SearchController::class, 'search'])->name('search.search'
 Route::middleware('verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::patch('/profile', [ProfileController::class, 'update_petsitter_info'])->name('profile.update_petsitter_info');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('users', 'UserController');

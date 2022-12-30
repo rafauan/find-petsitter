@@ -104,7 +104,15 @@ class OpinionController extends Controller
         $customer = User::find($opinion->customer_id);
         $other_customers = User::where('id', '!=', $opinion->customer_id)->where('role', 'Customer')->get();
 
-        return view('opinions.edit', compact('petsitter', 'other_petsitters', 'customer', 'other_customers'));  // -> resources/views/opinions/edit.blade.php
+        // Scores
+        $scores = [1, 2, 3, 4, 5];
+        $score = $opinion->score; 
+        $index = array_search($score, $scores);
+        if ($index !== false) {
+            array_splice($scores, $index, 1);
+        }
+
+        return view('opinions.edit', compact('opinion', 'petsitter', 'other_petsitters', 'customer', 'other_customers', 'scores', 'score'));  // -> resources/views/opinions/edit.blade.php
     }
  
     /**
@@ -119,7 +127,7 @@ class OpinionController extends Controller
         // Validation for required fields (and using some regex to validate our numeric value)
         $request->validate(
             [
-                'message' => 'required'
+                'text' => 'required'
             ],
             [   
                 'required' => 'This field cannot be empty',

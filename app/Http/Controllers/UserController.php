@@ -159,17 +159,20 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        // User
+        $user = User::find($id);
+        
+        // Services
         $petsitter_services = PetsitterServices::where('petsitter_id', $id)->get();
-
         $service_ids = $petsitter_services->pluck('service_id')->toArray();
-
         $user_services = Service::whereIn('id', $service_ids)->get();
-
         $services = Service::all();
-
         $services = $services->diff($user_services);
 
+        // Cities
         $cities = City::all();
+        $city = City::find($user->city_id);
+        $other_cities = City::where('id', '!=', $user->city_id)->get();
 
         $profile_image = ProfileImage::where('user_id', $id)->first();
 
@@ -181,10 +184,12 @@ class UserController extends Controller
 
         return view('users.edit', [
             'services' => $services,
-            'user' => User::find($id),
+            'user' => $user,
             'user_services' => $user_services,
             'cities' => $cities,
-            'profile_image_url' => $profile_image_path
+            'profile_image_url' => $profile_image_path,
+            'city' => $city,
+            'other_cities' => $other_cities
         ]); // -> resources/views/stocks/edit.blade.php
     }
 

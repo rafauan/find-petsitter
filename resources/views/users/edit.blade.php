@@ -174,9 +174,9 @@
                 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
                 aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
             >
-                {{-- <option value="{{ $city->id }}" selected>{{ $city->name }}</option> --}}
-                @foreach ($cities as $city)
-                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                <option value="{{ $city->id }}" selected>{{ $city->name }}</option>
+                @foreach ($other_cities as $other_city)
+                    <option value="{{ $other_city->id }}">{{ $other_city->name }}</option>
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
