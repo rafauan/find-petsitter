@@ -39,6 +39,7 @@ Route::post('/search_results', 'WebsiteController@search_results')->name('websit
 Route::get('/show_profile/{id}', 'WebsiteController@show_profile')->name('website.show_profile');
 Route::post('/create_inquiry', 'WebsiteController@create_inquiry')->name('website.create_inquiry');
 Route::get('/add_opinion/{id}', 'WebsiteController@add_opinion')->name('website.add_opinion');
-Route::post('/create_opinion', 'WebsiteController@add_opinion')->name('website.create_opinion');
+
+Route::post('/create_opinion', 'WebsiteController@create_opinion')->name('website.create_opinion');
 
 require __DIR__.'/auth.php';

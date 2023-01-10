@@ -151,20 +151,18 @@ class WebsiteController extends Controller
      */
     public function create_opinion(Request $request) 
     {
-        $request->validate(
-            [
-                'text' => 'required',
-                'score' => 'required',
-                'petsitter_id' => 'required',
-                'customer_id' => 'required'
-            ],
-            [   
-                'required' => 'This field cannot be empty',
+        // $request->validate(
+        //     [
+        //         'text' => 'required',
+        //         'score' => 'required',
+        //         'petsitter_id' => 'required',
+        //         'customer_id' => 'required'
+        //     ],
+        //     [   
+        //         'required' => 'This field cannot be empty',
 
-            ]
-        ); 
-
-        dd($request);
+        //     ]
+        // ); 
 
         $opinion = new Opinion;
         $opinion->text = $request->get('text');
@@ -174,5 +172,7 @@ class WebsiteController extends Controller
         $opinion->save();
 
         return redirect()->route('website.add_opinion', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
+
+        dd($opinion);
     }
 }

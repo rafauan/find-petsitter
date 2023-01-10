@@ -23,30 +23,30 @@
   <div class="w-9/12 py-4">
     <div class="pb-4">
       <p class="text-2xl font-bold">Dodaj opinie</p>
-      <form method="POST" action="{{ route('website.create_opinion', ['id' => 77]) }}">
-        @csrf
-
-        <div class="mt-2">
-          <x-select-score />
-        </div>
-
-        <div class="mt-2">
-          <x-opinion-text />
-        </div>
-
-        <button type="submit" class="w-full block rounded-md mt-4 bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-600">
-          Dodaj opinie
-        </button>
-      </form>
-
 
       @if (session('success'))
       <div class="bg-emerald-100 border-l-4 border-emerald-500 text-emerald-700 p-4 mt-6" role="alert">
         <p>
-          Zapytanie zostało wysłane, aby przejrzeć szczegóły zapytania wejdź pod ten 
-          <a href="#" class="font-bold hover:opacity-75 transition ease-in-out duration-150">link.</a>
+          Twoja opinia została dodana, kiedy zostanie zaakceptowana przez administratora pojawi się na profilu opiekuna.
         </p>
       </div>
+
+      @else 
+        <form method="POST" action="{{ route('website.create_opinion', ['id' => $user->id]) }}">
+          @csrf
+
+          <div class="mt-2">
+            <x-select-score />
+          </div>
+
+          <div class="mt-2">
+            <x-opinion-text />
+          </div>
+
+          <button type="submit" class="w-full block rounded-md mt-4 bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-600">
+            Dodaj opinie
+          </button>
+        </form>
       @endif 
 
     </div>
