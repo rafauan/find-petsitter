@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SearchController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -21,24 +21,9 @@ Route::get('/', function () {
     return view('website.index');
 });
 
-Route::get('/search', function () {
-    return view('website.search');
-});
-
-Route::get('/search_results', function () {
-    return view('website.search_results');
-});
-
-Route::get('/petsitter', function () {
-    return view('website.petsitter_profile');
-});
-
-Route::get('/search', [SearchController::class, 'search'])->name('search.search');
-
 Route::middleware('verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    // Route::patch('/profile', [ProfileController::class, 'update_petsitter_info'])->name('profile.update_petsitter_info');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('users', 'UserController');
@@ -46,10 +31,13 @@ Route::middleware('verified')->group(function () {
     Route::resource('services', 'ServiceController');
     Route::resource('inquiries', 'InquiryController');
     Route::resource('opinions', 'OpinionController');
-    // Route::get('/dashboard', [UserController::class, 'index']);
     Route::get('/dashboard', [ProfileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 });
 
-// Route::resource('search', 'SearchController');
+Route::get('/search', 'WebsiteController@search')->name('website.search');
+Route::post('/search_results', 'WebsiteController@search_results')->name('website.search_results');
+Route::get('/show_profile/{id}', 'WebsiteController@show_profile')->name('website.show_profile');
+Route::post('/create_inquiry', 'WebsiteController@create_inquiry')->name('website.create_inquiry');
+
 
 require __DIR__.'/auth.php';

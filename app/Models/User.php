@@ -46,4 +46,14 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function petsitter_services()
+    {
+        return $this->hasMany('App\Models\PetsitterServices', 'petsitter_id', 'id');
+    }
+
+    public function profile_image()
+    {
+        return $this->hasOne(ProfileImage::class);
+    }
 }

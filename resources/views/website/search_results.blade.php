@@ -1,6 +1,7 @@
 @extends('website.layouts.main')
 
 @section('content')
+
 <header>
     <!-- Background image -->
     <div class="relative overflow-hidden bg-no-repeat bg-cover" style="
@@ -21,196 +22,40 @@
     <!-- Background image -->
 </header>
 
-
-<div class="flex flex-col items-left">
-    
-</div>
-
-
 <div class="flex flex-col items-center h-full" x-data="show: true">
 
     <div class="flex justify-self-start flex-col bg-white w-9/12">
         <p class="text-3xl font-semibold pl-8 pt-8">Wybrane filtry:</p>    
 
-        <form class="px-8">   
-            <div>
-                <label for="countries" class="block mt-4 mb-2 text-sm font-medium text-gray-900">Wybierz miasto</label>
-                <select id="countries" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5">
-                  <option selected>Miasto</option>
-                  <option value="US">Gdynia</option>
-                  <option value="CA">Gdańsk</option>
-                  <option value="FR">Warszawa</option>
-                  <option value="DE">Wrocław</option>
-                  <option value="DE">Łódź</option>
-                  <option value="DE">Kraków</option>
-                  <option value="DE">Białystok</option>
-                  <option value="DE">Lublin</option>
+        <form class="px-8" method="POST" action="{{ route('website.search_results') }}">
+          @csrf
+          
+            <div class="mt-2">
+                <label for="city_id" class="block mb-2 font-medium text-sm text-gray-700">{{ __('City') }}</label>
+                <select id="city_id" class="
+                    bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
+                    aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
+                >
+                  <option value="{{ $city->id }}" selected>{{ $city->name }}</option>
+                  @foreach ($other_cities as $other_city)
+                      <option value="{{ $other_city->id }}">{{ $other_city->name }}</option>
+                  @endforeach
                 </select>
+                <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
             </div>
-    
-            <div>
-                <p class="block my-2 text-sm font-medium text-gray-900">Waga psa</p>
-                <fieldset class="flex flex-wrap gap-3">
-                    <legend class="sr-only">Waga</legend>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="ColorOption"
-                        value="ColorBlack"
-                        id="ColorBlack"
-                        class="peer hidden"
-                        checked
-                      />
-                  
-                      <label
-                        for="ColorBlack"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">do 5 kg</p>
-                      </label>
-                    </div>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="ColorOption"
-                        value="ColorRed"
-                        id="ColorRed"
-                        class="peer hidden"
-                      />
-                  
-                      <label
-                        for="ColorRed"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">do 20 kg</p>
-                      </label>
-                    </div>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="ColorOption"
-                        value="ColorBlue"
-                        id="ColorBlue"
-                        class="peer hidden"
-                      />
-                  
-                      <label
-                        for="ColorBlue"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">do 40 kg</p>
-                      </label>
-                    </div>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="ColorOption"
-                        value="ColorGold"
-                        id="ColorGold"
-                        class="peer hidden"
-                      />
-                  
-                      <label
-                        for="ColorGold"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">40kg+</p>
-                      </label>
-                    </div>
-                  </fieldset>
-                  
-            </div>
-    
-            <div class="my-2">
-                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Wybierz usługę</label>
-                <select id="countries" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5">
-                    <option selected>Usługa</option>
-                    <option value="US">Szkolenie</option>
-                    <option value="CA">Wyprowadzanie</option>
-                    <option value="FR">Opieka dzienna</option>
-                    <option value="DE">Konsultacja behawioralna</option>
-                  </select>
-            </div>
-    
-            <div class="my-2">
-                <p class="block my-2 text-sm font-medium text-gray-900">Wiek psa</p>
-                <fieldset class="flex flex-wrap gap-3">
-                    <legend class="sr-only">Waga</legend>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="DogAgeOption"
-                        value="DogAgeYoung"
-                        id="DogAgeYoung"
-                        class="peer hidden"
-                        checked
-                      />
-                  
-                      <label
-                        for="DogAgeYoung"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">do roku</p>
-                      </label>
-                    </div>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="DogAgeOption"
-                        value="DogAgeMedium"
-                        id="DogAgeMedium"
-                        class="peer hidden"
-                      />
-                  
-                      <label
-                        for="DogAgeMedium"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">1-5</p>
-                      </label>
-                    </div>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="DogAgeOption"
-                        value="DogAgeOld"
-                        id="DogAgeOld"
-                        class="peer hidden"
-                      />
-                  
-                      <label
-                        for="DogAgeOld"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">5-8</p>
-                      </label>
-                    </div>
-                  
-                    <div>
-                      <input
-                        type="radio"
-                        name="DogAgeOption"
-                        value="DogAgeVeryOld"
-                        id="DogAgeVeryOld"
-                        class="peer hidden"
-                      />
-                  
-                      <label
-                        for="DogAgeVeryOld"
-                        class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                      >
-                        <p class="text-sm font-medium">ponad 8</p>
-                      </label>
-                    </div>
-                  </fieldset>
-                  
+
+            <div class="mt-2">
+              <label for="service_id" class="block mb-2 font-medium text-sm text-gray-700">{{ __('City') }}</label>
+              <select id="service_id" class="
+                  bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
+                  aria-label="service_id" name="service_id" id="service_id" required="required" autofocus="autofocus" autocomplete="service_id"    
+              >
+                <option value="{{ $service->id }}" selected>{{ $service->name }}</option>
+                @foreach ($other_services as $other_service)
+                    <option value="{{ $other_service->id }}">{{ $other_service->name }}</option>
+                @endforeach
+              </select>
+              <x-input-error :messages="$errors->get('service_id')" class="mt-2" />
             </div>
     
             <div class="my-4">
@@ -224,89 +69,44 @@
     </div>
 
     <div class="flex flex-wrap justify-between w-9/12 bg-white p-8 gap-x-2 gap-y-8">
+      
+      @unless(count($users) == 0)
+        @foreach($users as $user)
+          <div class="rounded overflow-hidden shadow-lg w-[calc(33%-1rem)]">
+              <a href="/show_profile/{{ $user->id }}" class="hover:opacity-60 transition">
+                  <img class="w-full" src="{{ Storage::url($user->profile_image->path) }}" alt="Sunset in the mountains">
+                  <div class="px-6 py-4">
+                  <div class="font-bold text-xl mb-2">
+                    {{ $user->name }}
+                  </div>
+                  <p class="text-gray-700 text-base">
+                    {{ $city->name }}
+                  </p>
+                  </div>
 
-        <div class="rounded overflow-hidden shadow-lg w-[calc(33%-1rem)]">
-            <a href="#" class="hover:opacity-60 transition">
-                <img class="w-full" src="https://images.unsplash.com/photo-1581888227599-779811939961?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80" alt="Sunset in the mountains">
-                <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Janusz Nowak</div>
-                <p class="text-gray-700 text-base">
-                    Gdańsk
-                </p>
-                </div>
+                  <div class="px-6 pt-4 pb-2">
+                    @foreach ($user->petsitter_services as $petsitter_service)
+                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                        {{ $petsitter_service->service->name }}
+                      </span>
+                    @endforeach
+                  </div>
+              </a>
+          </div> 
+        @endforeach
+      @else
 
-                <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                </div>
-            </a>
-        </div>        
+      <div class="flex flex-col items-center justify-center w-full">
+        <p class="mb-2 text-2xl font-bold text-center text-gray-800 md:text-3xl">
+          <span class="text-emerald-700">Ups!</span> Nie znaleziono opiekunów
+        </p>
+        <p class="mb-8 text-center text-gray-500 md:text-lg">
+          Niestety nie znaleziono opiekunów przy użyciu podanych filtrów, spróbuj poszukać innymi kryteriami.
+        </p>
+      </div>
 
-        <div class="rounded overflow-hidden shadow-lg  w-[calc(33%-1rem)]">
-            <a href="#" class="hover:opacity-60 transition">
-                <img class="w-full" src="https://images.unsplash.com/photo-1581888227599-779811939961?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80" alt="Sunset in the mountains">
-                <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Janusz Nowak</div>
-                <p class="text-gray-700 text-base">
-                    Gdańsk
-                </p>
-                </div>
-
-                <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="rounded overflow-hidden shadow-lg  w-[calc(33%-1rem)]">
-            <a href="#" class="hover:opacity-60 transition">
-                <img class="w-full" src="https://images.unsplash.com/photo-1581888227599-779811939961?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80" alt="Sunset in the mountains">
-                <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Janusz Nowak</div>
-                <p class="text-gray-700 text-base">
-                    Gdańsk
-                </p>
-                </div>
-
-                <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                </div>
-            </a>
-        </div>
-
-        <div class="rounded overflow-hidden shadow-lg  w-[calc(33%-1rem)]">
-            <a href="#" class="hover:opacity-60 transition">
-                <img class="w-full" src="https://images.unsplash.com/photo-1581888227599-779811939961?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80" alt="Sunset in the mountains">
-                <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2">Janusz Nowak</div>
-                <p class="text-gray-700 text-base">
-                    Gdańsk
-                </p>
-                </div>
-
-                <div class="px-6 pt-4 pb-2">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                </div>
-            </a>
-        </div>
+      @endunless
     </div>
 </div>
-
-
-
-{{-- <div class="grid grid-cols-4 gap-4 w-9/12 items-center justify-center border-solid border-2 border-sky-500">
-    <div class="bg-emerald-600">01</div>
-    <!-- ... -->
-    <div class="bg-emerald-600">09</div>
-    <div class="bg-emerald-600">09</div>
-    <div class="bg-emerald-600">09</div>
-</div> --}}
 
 @endsection

@@ -66,118 +66,19 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
 
-        if($request->user()->role == 'Petsitter') {
-            $user = User::find($request->user()->id);
+        // dd($request->get('profile_description'));
 
-            // Validation for required fields (and using some regex to validate our numeric value)
-            $request->validate(
-                [
-                    'name' => 'required',
-                    'email' => 'required|email|unique:users,email,' . $user->id,
-                    'role' => 'required',
-                    'status' => 'required',
-                    // 'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
-                ],
-                [   
-                    'name.required' => 'Please Provide Your Email Address For Better Communication, Thank You',
-                    'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one',
-                    'email.email' => 'Please try with correct email address'
-                ]
-            ); 
-    
-            $user->name = $request->get('name');
-            $user->email = $request->get('email');
-            $user->role = $request->get('role');
-            $user->status = $request->get('status');
-            $user->city_id = $request->get('city_id');
-            $user->profile_description = $request->get('profile_description');
-            $user->save();
-    
-            $profile_image_file = $request->file('profile_image');
-    
-            if($profile_image_file != null) {
-                $file_path = $profile_image_file->storeAs('public/profile_images', 'profile_picture-' . $user->id . '.jpg');
-                $file_name = $request->file('profile_image')->getClientOriginalName();
-    
-                $existing_profile_image = ProfileImage::where('user_id', $user->id)->first();
-    
-                if($existing_profile_image) {
-                    $existing_profile_image->delete();
-                }
-        
-                $profile_image = new ProfileImage;
-                $profile_image->name = $file_name;
-                $profile_image->path = $file_path;
-                $profile_image->user_id = $user->id;
-                $profile_image->save();
-            }
-    
-            $services = $request->get('services');
-            $user_services = $request->get('user_services');
-    
-            if($user->role == 'Petsitter' && $services) {
-                foreach($services as $service) {
-                    $petsitter_service = new PetsitterServices;
-                    $petsitter_service->petsitter_id = $user->id;
-                    $petsitter_service->service_id = $service;
-                    $petsitter_service->save();
-                }
-            }
-    
-            if($user->role == 'Petsitter' && $user_services) {
-                foreach($user_services as $user_service) {
-                    $petsitter_service = PetsitterServices::where('petsitter_id', $user->id)->where('service_id', $user_service)->get();
-                    $petsitter_service->each->delete();
-                }
-            }
-        } else {
-            $request->user()->save();
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Update the user's profile information.
-     *
-     * @param  \App\Http\Requests\ProfileUpdateRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update_petsitter_info(ProfileUpdateRequest $request)
-    {
-        $user = User::find($request->user()->id);
-
-        // Validation for required fields (and using some regex to validate our numeric value)
-        $request->validate(
-            [
-                'name' => 'required',
-                'email' => 'required|email|unique:users,email,' . $user->id,
-                'role' => 'required',
-                'status' => 'required',
-                // 'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
-            ],
-            [   
-                'name.required' => 'Please Provide Your Email Address For Better Communication, Thank You',
-                'email.unique' => 'Sorry, this email address is already used by another user. Please try with different one',
-                'email.email' => 'Please try with correct email address'
-            ]
-        ); 
-
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->role = $request->get('role');
-        $user->status = $request->get('status');
-        $user->city_id = $request->get('city_id');
-        $user->profile_description = $request->get('profile_description');
-        $user->save();
 
         $profile_image_file = $request->file('profile_image');
 
         if($profile_image_file != null) {
-            $file_path = $profile_image_file->storeAs('public/profile_images', 'profile_picture-' . $user->id . '.jpg');
+            $file_path = $profile_image_file->storeAs('public/profile_images', 'profile_picture-' . $request->user()->id . '.jpg');
             $file_name = $request->file('profile_image')->getClientOriginalName();
 
-            $existing_profile_image = ProfileImage::where('user_id', $user->id)->first();
+            $existing_profile_image = ProfileImage::where('user_id', $request->user()->id)->first();
 
             if($existing_profile_image) {
                 $existing_profile_image->delete();
@@ -186,29 +87,35 @@ class ProfileController extends Controller
             $profile_image = new ProfileImage;
             $profile_image->name = $file_name;
             $profile_image->path = $file_path;
-            $profile_image->user_id = $user->id;
+            $profile_image->user_id = $request->user()->id;
             $profile_image->save();
         }
+
+        $request->user()->profile_description = $request->get('profile_description');
+        $request->user()->city_id = $request->get('city_id');
 
         $services = $request->get('services');
         $user_services = $request->get('user_services');
 
-        if($user->role == 'Petsitter' && $services) {
+        if($request->user()->role == 'Petsitter' && $services) {
             foreach($services as $service) {
                 $petsitter_service = new PetsitterServices;
-                $petsitter_service->petsitter_id = $user->id;
+                $petsitter_service->petsitter_id = $request->user()->id;
                 $petsitter_service->service_id = $service;
                 $petsitter_service->save();
             }
         }
 
-        if($user->role == 'Petsitter' && $user_services) {
+        if($request->user()->role == 'Petsitter' && $user_services) {
             foreach($user_services as $user_service) {
-                $petsitter_service = PetsitterServices::where('petsitter_id', $user->id)->where('service_id', $user_service)->get();
+                $petsitter_service = PetsitterServices::where('petsitter_id', $request->user()->id)->where('service_id', $user_service)->get();
                 $petsitter_service->each->delete();
             }
         }
 
+        $request->user()->status = 'Draft';
+
+        $request->user()->save();
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
