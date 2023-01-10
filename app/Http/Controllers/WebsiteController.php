@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\City;
 use App\Models\User;
+use App\Models\Opinion;
 use App\Models\ProfileImage;
 use App\Models\Inquiry;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +70,7 @@ class WebsiteController extends Controller
      */
     public function show_profile($id) 
     {
-        $user = User::with('petsitter_services.service')->find($id);
+        $user = User::with('petsitter_services.service', 'opinions')->find($id);
         $city = City::find($user->city_id);
 
         $profile_image = ProfileImage::where('user_id', $user->id)->first();
@@ -127,5 +128,51 @@ class WebsiteController extends Controller
 
         // Przekieruj z powrotem do strony /show_profile/{id} i wyświetl komunikat
         return redirect()->route('website.show_profile', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
+    }
+
+    /**
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function add_opinion($id) 
+    {
+        $user = User::find($id);
+        $customer = User::find(Auth::id());
+
+        return view('website.add_opinion', [
+            'user' => $user,
+            'customer' => $customer
+        ]);
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function create_opinion(Request $request) 
+    {
+        $request->validate(
+            [
+                'text' => 'required',
+                'score' => 'required',
+                'petsitter_id' => 'required',
+                'customer_id' => 'required'
+            ],
+            [   
+                'required' => 'This field cannot be empty',
+
+            ]
+        ); 
+
+        dd($request);
+
+        $opinion = new Opinion;
+        $opinion->text = $request->get('text');
+        $opinion->score = $request->get('score');
+        $opinion->petsitter_id = $request->get('id');
+        $opinion->customer_id = Auth::id();
+        $opinion->save();
+
+        return redirect()->route('website.add_opinion', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
     }
 }

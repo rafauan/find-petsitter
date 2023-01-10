@@ -20,4 +20,14 @@ class Opinion extends Model
         'customer_id',
         'petsitter_id'
     ];
+
+    public function petsitter()
+    {
+        return $this->hasOne(User::class, 'id', 'petsitter_id')->where('role', 'Petsitter');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(User::class, 'id', 'customer_id')->where('role', 'Customer');
+    }
 }

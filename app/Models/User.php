@@ -52,6 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Models\PetsitterServices', 'petsitter_id', 'id');
     }
 
+    public function opinions()
+    {
+        return $this->hasMany('App\Models\Opinion', 'petsitter_id', 'id');
+    }
+
     public function profile_image()
     {
         return $this->hasOne(ProfileImage::class);

@@ -66,7 +66,6 @@
               <a href="#" class="font-bold hover:opacity-75 transition ease-in-out duration-150">link.</a>
             </p>
           </div>
-
         @else 
 
           @if (Auth::check() && Auth::user()->role == 'Customer')
@@ -74,184 +73,23 @@
                 @csrf
 
                 <div class="mt-2">
-                  <label for="city_id" class="block font-medium text-sm text-gray-700">{{ __('City') }}</label>
-                  <select id="city_id" class="
-                      bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
-                      aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
-                  >
-                    <option value="{{ $city->id }}">{{ $city->name }}</option>
-                  </select>
-                  <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
+                  <x-select-city :city="$city" />
                 </div>
         
                 <div class="mt-2">
-                    <p class="block my-2 text-sm font-medium text-gray-900">Waga psa</p>
-                    <fieldset class="flex flex-wrap gap-3">
-                        <legend class="sr-only">Waga</legend>
-                        <div>
-                          <input
-                            type="radio"
-                            name="weight"
-                            value="5"
-                            id="5"
-                            class="peer hidden"
-                            checked
-                          />
-                      
-                          <label
-                            for="5"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">do 5 kg</p>
-                          </label>
-                        </div>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="weight"
-                            value="20"
-                            id="20"
-                            class="peer hidden"
-                          />
-                      
-                          <label
-                            for="20"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">do 20 kg</p>
-                          </label>
-                        </div>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="weight"
-                            value="40"
-                            id="40"
-                            class="peer hidden"
-                          />
-                      
-                          <label
-                            for="40"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">do 40 kg</p>
-                          </label>
-                        </div>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="weight"
-                            value="40+"
-                            id="40+"
-                            class="peer hidden"
-                          />
-                      
-                          <label
-                            for="40+"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">40kg+</p>
-                          </label>
-                        </div>
-                      </fieldset>
+                  <x-select-dog-weight />
                 </div>
 
                 <div class="mt-2">
-                  <label for="service_id" class="block font-medium text-sm text-gray-700">{{ __('Service') }}</label>
-                  <select id="service_id" class="
-                      bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
-                      aria-label="service_id" name="service_id" id="service_id" required="required" autofocus="autofocus" autocomplete="service_id"
-                  >
-                      @foreach ($user->petsitter_services as $petsitter_service)
-                          <option value="{{ $petsitter_service->service->id }}">{{ $petsitter_service->service->name }}</option>
-                      @endforeach
-                  </select>
-                  <x-input-error :messages="$errors->get('service_id')" class="mt-2" />
+                  <x-select-service-petsitter :petsitter_services="$user->petsitter_services" />
                 </div>
         
                 <div class="my-2">
-                    <p class="block my-2 text-sm font-medium text-gray-900">Wiek psa</p>
-                    <fieldset class="flex flex-wrap gap-3">
-                        <legend class="sr-only">Wiek</legend>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="age"
-                            value=">1"
-                            id=">1"
-                            class="peer hidden"
-                            checked
-                          />
-                      
-                          <label
-                            for=">1"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">do roku</p>
-                          </label>
-                        </div>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="age"
-                            value="1-5"
-                            id="1-5"
-                            class="peer hidden"
-                          />
-                      
-                          <label
-                            for="1-5"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">1-5</p>
-                          </label>
-                        </div>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="age"
-                            value="5-8"
-                            id="5-8"
-                            class="peer hidden"
-                          />
-                      
-                          <label
-                            for="5-8"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">5-8</p>
-                          </label>
-                        </div>
-                      
-                        <div>
-                          <input
-                            type="radio"
-                            name="age"
-                            value="<8"
-                            id="<8"
-                            class="peer hidden"
-                          />
-                      
-                          <label
-                            for="<8"
-                            class="flex cursor-pointer items-center justify-center rounded-md border border-gray-100 py-2 px-3 text-gray-900 hover:border-gray-200 peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white"
-                          >
-                            <p class="text-sm font-medium">ponad 8</p>
-                          </label>
-                        </div>
-                      </fieldset>
-                      
+                  <x-select-dog-age />
                 </div>
 
                 <div class="my-2">
-                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Wiadomość do opiekuna</label>
-                    <textarea id="message" name="message" required rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-emerald-700 focus:border-emerald-700" placeholder="Napisz jakieś szczegółowe informacje, których nie ma w formularzu..."></textarea>
+                  <x-message-form/>
                 </div>
         
                 <div class="my-4">
@@ -269,7 +107,17 @@
 
         @endif
 
+        <div class="flex justify-between align-middle mt-12 mb-6">
+          <p class="text-2xl font-bold">Opinie</p>
+          <a href="/add_opinion/{{ $user->id }}" class="rounded-md bg-emerald-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-emerald-600">
+            Dodaj opinię
+          </a>
+        </div>
+
+        <x-opinions :user="$user" />
     </div>
 </div>
+
+
 
 @endsection
