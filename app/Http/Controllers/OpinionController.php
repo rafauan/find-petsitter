@@ -140,6 +140,7 @@ class OpinionController extends Controller
         $opinion->score = $request->get('score');
         $opinion->petsitter_id = $request->get('petsitter_id');
         $opinion->customer_id = $request->get('customer_id');
+        $opinion->status = $request->get('status');
         $opinion->save();
 
         return redirect()->route('opinions.show', ['opinion' => Opinion::find($id)])->with('success', __('Opinion updated'));

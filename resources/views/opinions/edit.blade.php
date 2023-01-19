@@ -70,6 +70,40 @@
         </div>
 
         <div class="mt-2">
+            <label class="block font-medium text-sm text-gray-700" for="status">{{ __('Status') }}</label>            
+            <div class="flex justify-left" style="margin-top: 0 !important">
+                <div class="xl:w-96">
+                <select class="form-select appearance-none
+                    block
+                    w-full
+                    text-base
+                    font-normal
+                    text-gray-700
+                    bg-white bg-clip-padding bg-no-repeat
+                    border border-solid border-gray-300
+                    rounded
+                    transition
+                    ease-in-out
+                    focus:text-gray-700 focus:bg-white focus:ring-emerald-700 focus:outline-none" aria-label="status" name="status" id="status" required="required" autofocus="autofocus" autocomplete="status">
+                    
+                    @if($opinion->status == 'Pending') {
+                        <option selected value="Pending">{{ __('Pending') }}</option>
+                        <option value="Published">{{ __('Published') }}</option>
+                    }
+    
+                    @elseif($opinion->status == 'Published') {
+                        <option selected value="Published">{{ __('Published') }}</option>
+                        <option value="Pending">{{ __('Pending') }}</option>
+                    }
+                    
+                    @endif
+                
+                </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2">
             {{-- @php
                 $customers = App\Models\User::where('role', 'Customer')->where('status', 'Published')->get();
             @endphp --}}

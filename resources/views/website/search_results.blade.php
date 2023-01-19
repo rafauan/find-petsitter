@@ -74,7 +74,11 @@
         @foreach($users as $user)
           <div class="rounded overflow-hidden shadow-lg w-[calc(33%-1rem)]">
               <a href="/show_profile/{{ $user->id }}" class="hover:opacity-60 transition">
-                  <img class="w-full" src="{{ Storage::url($user->profile_image->path) }}" alt="Sunset in the mountains">
+                  @if($user->profile_image)
+                    <img class="w-full" src="{{ Storage::url($user->profile_image->path) }}" alt="Profile picture">
+                  @else
+                    <img class="w-full" src="{{ asset('storage/profile_images/blank_profile_picture.png') }}" alt="Profile picture">
+                  @endif
                   <div class="px-6 py-4">
                   <div class="font-bold text-xl mb-2">
                     {{ $user->name }}

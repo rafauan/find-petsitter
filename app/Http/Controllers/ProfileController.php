@@ -156,13 +156,20 @@ class ProfileController extends Controller
         // $latestUser = User::get()->last();
         // $latestInquiries = Inquiry::latest()->take(5)->get();
 
+        $users = User::all() ?? [];
+        $inquiries = Inquiry::all() ?? [];
+        $latestUser = User::get()->last();
+        $latestInquiries = Inquiry::latest()->take(5)->get() ?? [];
+        $latestInquiryUser = Inquiry::get()->last() ? User::find(Inquiry::get()->last()->petsitter_id) : null;
+
+
         return view('dashboard', [
             // 'users' => User::latest()->filter(request(['tag', 'search']))->paginate(4)
-            'users' => User::all(),
-            'inquiries' => Inquiry::all(),
-            'latestUser' => User::get()->last(),
-            'latestInquiries' => Inquiry::latest()->take(5)->get(),
-            'latestInquiryUser' => User::find(Inquiry::get()->last()->petsitter_id)
+            'users' => $users,
+            'inquiries' => $inquiries,
+            'latestUser' => $latestUser,
+            'latestInquiries' => $latestInquiries,
+            'latestInquiryUser' => $latestInquiryUser
         ]);
     }
 }
