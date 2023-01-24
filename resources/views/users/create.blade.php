@@ -62,7 +62,6 @@
                 name="role"
                 :options="$roles"
                 :extendedOption="false"
-                :editUserRole="true"
             />
         </div>
 
@@ -73,7 +72,6 @@
                 name="status"
                 :options="$statuses"
                 :extendedOption="false"
-                :editUserRole="false"
             />
         </div>
 
@@ -93,7 +91,6 @@
                 name="city_id"
                 :options="$cities"
                 :extendedOption="true"
-                :editUserRole="false"
             />
         </div>
 

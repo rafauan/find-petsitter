@@ -48,9 +48,9 @@
 
         <div class="pt-4">
             <p class="text-2xl font-bold">Usługi</p>
-            <div class="flex justify-self-start bg-white w-9/12 pt-3">
+            <div class="md:flex justify-self-start bg-white w-9/12">
                 @foreach ($user->petsitter_services as $petsitter_service)
-                  <p class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700 mr-4">
+                  <p class="whitespace-nowrap rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700 mr-4 mt-3">
                     {{ $petsitter_service->service->name }}
                   </p>
                 @endforeach

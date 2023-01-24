@@ -31,7 +31,6 @@
                             placeholder="{{ __('Search') }}" 
                             value="{{ request()->get('search') }}"
                             required
-
                         >
                         <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-emerald-600 hover:bg-emerald-500 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 transition">
                             {{ __('Search') }}
@@ -77,18 +76,10 @@
                                     {{ $opinion->score }}
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    @php 
-                                        $customer = App\Models\User::find($opinion->customer_id);
-                                    @endphp 
-
-                                    {{ $customer->name }}
+                                    {{ $opinion->customer->name }}
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    @php 
-                                        $petsitter = App\Models\User::find($opinion->petsitter_id);
-                                    @endphp 
-
-                                    {{ $petsitter->name }}
+                                    {{ $opinion->petsitter->name }}
                                 </td>
                             </tr>
                         @endforeach

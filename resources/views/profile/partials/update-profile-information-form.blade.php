@@ -25,38 +25,40 @@
         @endif
 
         <div>
-            @if($profile_image_url != null)
-                <img 
-                    class="w-24 h-24 rounded-full mb-4" 
-                    style="object-fit:cover;" 
-                    src="{{ Storage::url($profile_image_url) }}" 
-                    alt="Profile picture"
-                >
+            @if(Auth::user()->role !== 'Customer') 
+                @if($profile_image_url != null)
+                    <img 
+                        class="w-24 h-24 rounded-full mb-4" 
+                        style="object-fit:cover;" 
+                        src="{{ Storage::url($profile_image_url) }}" 
+                        alt="Profile picture"
+                    >
 
-                <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image_id">{{ __('Change image') }}</label>
-            @else 
-                <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image_id">{{ __('Profile picture') }}</label>
+                    <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image_id">{{ __('Change image') }}</label>
+                @else 
+                    <label class="block font-medium text-sm text-gray-700 mb-2" for="profile_image_id">{{ __('Profile picture') }}</label>
 
-                <img 
-                    class="w-24 h-24 rounded-full mb-4" 
-                    style="object-fit:cover;" 
-                    src="{{ Storage::url('public/profile_images/blank_profile_picture.png') }}" 
-                    alt="Profile picture"
-                >
+                    <img 
+                        class="w-24 h-24 rounded-full mb-4" 
+                        style="object-fit:cover;" 
+                        src="{{ Storage::url('public/profile_images/blank_profile_picture.png') }}" 
+                        alt="Profile picture"
+                    >
+                @endif
+
+                <input type="file" class="text-sm text-grey-500 outline-none
+                    file:mr-5 file:py-2 file:px-6
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-emerald-700 file:text-white
+                    hover:file:cursor-pointer hover:file:bg-emerald-600
+                    hover:file:text-white file:transition file:ease-in-out file:duration-150
+                    "
+                    type="file"
+                    name="profile_image"
+                    id="profile_image"
+                />
             @endif
-
-            <input type="file" class="text-sm text-grey-500 outline-none
-                file:mr-5 file:py-2 file:px-6
-                file:rounded-full file:border-0
-                file:text-sm file:font-medium
-                file:bg-emerald-700 file:text-white
-                hover:file:cursor-pointer hover:file:bg-emerald-600
-                hover:file:text-white file:transition file:ease-in-out file:duration-150
-                "
-                type="file"
-                name="profile_image"
-                id="profile_image"
-            />
         </div>
 
         <div>
@@ -143,7 +145,6 @@
                 @endforeach
             </fieldset>
         </div>
-        @endif
 
         <div>
             <label for="profile_description" class="block font-medium text-sm text-gray-700">{{ __('Profile description') }}</label>
@@ -172,6 +173,10 @@
             >{{ old('profile_description', $user->profile_description) }}</textarea>
             <x-input-error :messages="$errors->get('profile_description')" class="mt-2" />
         </div>
+        
+        @endif
+
+
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

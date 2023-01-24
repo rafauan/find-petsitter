@@ -26,16 +26,21 @@ class Inquiry extends Model
 
     public function service()
     {
-        return $this->belongsTo(Service::class);
+        return $this->hasOne(Service::class);
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->hasOne(City::class);
     }
 
-    public function user()
+    public function petsitter()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id', 'petsitter_id')->where('role', 'Petsitter');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(User::class, 'id', 'customer_id')->where('role', 'Customer');
     }
 }

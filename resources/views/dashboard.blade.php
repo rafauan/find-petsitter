@@ -13,9 +13,15 @@
                 <div
                     class="p-12 text-center relative overflow-hidden bg-no-repeat bg-cover rounded-lg"
                     style="
-                        background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
+                        @if(Auth::user()->role == "Admin")
+                            background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
+                        @elseif(Auth::user()->role == "Customer")
+                            background-image: url('https://images.unsplash.com/photo-1545121436-87364761152c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80');
+                        @else
+                            background-image: url('https://images.unsplash.com/photo-1560211653-55f9fb833a8e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80');
+                        @endif
                         height: 200px;"
-                >
+                    >
                     <div
                         class="absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden bg-fixed"
                         style="background-color: rgba(0, 0, 0, 0.6)"
@@ -55,12 +61,12 @@
                                 </div>
                               </div>
                             </div>
-                          </section>
+                        </section>
 
                           <section>
                             <div class="mb-4">
                                 <h5 class="text-xl font-normal leading-normal mt-0 mb-2 text-gray-800">
-                                    {{ __('Newest account') }}
+                                    {{ __('Newest account') }} 
                                 </h5>
                                 <p>
                                     <a 
@@ -80,6 +86,30 @@
                                         <a 
                                             class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150 text-neutral-500"
                                             href="/inquiries/{{ $latestInquiry->id }}">{{ $latestInquiryUser->name }}
+                                        </a>
+                                        <br/>
+                                        @endforeach
+        
+                                    @else 
+        
+                                        <p class="text-neutral-400 italic">
+                                            {{ __('Not found') }}
+                                        </p>
+    
+                                    @endunless
+                                </p>
+                            </div> 
+
+                            <div class="mb-4">
+                                <h5 class="text-xl font-normal leading-normal mt-0 mb-2 text-gray-800">
+                                    {{ __('Newest opinions') }}
+                                </h5>
+                                <p>
+                                    @unless(count($latestOpinions) == 0)
+                                        @foreach($latestOpinions as $latestOpinion)
+                                        <a 
+                                            class="hover:text-emerald-700 cursor-pointer transition ease-in-out duration-150 text-neutral-500"
+                                            href="/opinions/{{ $latestOpinion->id }}">{{ $latestOpinionUser->name }}
                                         </a>
                                         <br/>
                                         @endforeach
@@ -124,11 +154,26 @@
                             @endif
                         @endif
 
-                        @if(Auth::user()->role == 'Customer')
+                        @if(Auth::user()->role == 'Customer' && $customerInquiriesNumber === 0)
                             <div class="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 mt-6" role="alert">
-                                <p class="font-bold">Wygląda na to, że nie masz jeszcze żadnych zapytań</p>
-                                <p>Przejdź do <a href="/search" class="font-bold hover:opacity-75 transition ease-in-out duration-150">wyszukiwarki</a> aby znaleźć odpowiedniego opiekuna.</p>
+                                <p class="font-bold">{{ __("It looks like you don't have any queries yet") }}</p>
+                                <p>{{ __("Go to") }} <a href="/search" class="font-bold hover:opacity-75 transition ease-in-out duration-150">{{ __("search engine") }}</a> {{ __("to find the right petsitter")}}.</p>
                             </div>
+                        @elseif(Auth::user()->role == 'Customer')
+                            <section class="text-gray-600 body-font">
+                                <div class="container px-5 py-12 mx-auto">
+                                    <div class="flex flex-wrap -m-4 text-center">
+                                        <div class="p-4 w-1/2">
+                                            <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">{{ $customerInquiriesNumber }}</h2>
+                                            <p class="leading-relaxed">{{ __('Your inquiries') }}</p>
+                                        </div>
+                                        <div class="p-4 w-1/2">
+                                            <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">{{ $customerOpinionsNumber }}</h2>
+                                            <p class="leading-relaxed">{{ __('Your opinions') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         @endif
                     </div>
                 </div>

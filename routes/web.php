@@ -31,7 +31,13 @@ Route::middleware('verified')->group(function () {
     Route::resource('services', 'ServiceController');
     Route::resource('inquiries', 'InquiryController');
     Route::resource('opinions', 'OpinionController');
-    Route::get('/dashboard', [ProfileController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');
+
+    Route::get('/customer_opinions', [ProfileController::class, 'customer_opinions'])->name('customer_opinions');
+    Route::get('/customer_opinions/{id}', [ProfileController::class, 'customer_opinion'])->name('customer_opinion');
+
+    Route::get('/customer_inquiries', [ProfileController::class, 'customer_inquiries'])->name('customer_inquiries');
+    Route::get('/customer_inquiries/{id}', [ProfileController::class, 'customer_inquiry'])->name('customer_inquiry');
 });
 
 Route::get('/search', 'WebsiteController@search')->name('website.search');

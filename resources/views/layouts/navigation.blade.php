@@ -17,25 +17,34 @@
                     </x-nav-link>
 
                     @if(Auth::user()->role == 'Admin')
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                        {{ __('Users') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                            {{ __('Users') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('cities.index')" :active="request()->routeIs('cities.index')">
-                        {{ __('Cities') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('cities.index')" :active="request()->routeIs('cities.index')">
+                            {{ __('Cities') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                        {{ __('Services') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
+                            {{ __('Services') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('inquiries.index')" :active="request()->routeIs('inquiries.index')">
-                        {{ __('Inquiries') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('inquiries.index')" :active="request()->routeIs('inquiries.index')">
+                            {{ __('Inquiries') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('opinions.index')" :active="request()->routeIs('opinions.index')">
-                        {{ __('Opinions') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('opinions.index')" :active="request()->routeIs('opinions.index')">
+                            {{ __('Opinions') }}
+                        </x-nav-link>
+
+                    @elseif(Auth::user()->role == 'Customer')
+                        <x-nav-link :href="route('customer_opinions')" :active="request()->routeIs('customer_opinions')">
+                            {{ __('Your opinions') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('customer_inquiries')" :active="request()->routeIs('customer_inquiries')">
+                            {{ __('Your inquiries') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -105,6 +114,37 @@
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+
+                @if(Auth::user()->role == 'Admin') 
+                    <x-responsive-nav-link :href="route('users.index')">
+                        {{ __('Users') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('cities.index')">
+                        {{ __('Cities') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('services.index')">
+                        {{ __('Services') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('inquiries.index')">
+                        {{ __('Inquiries') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('opinions.index')">
+                        {{ __('Opinions') }}
+                    </x-responsive-nav-link>
+
+                @elseif(Auth::user()->role == 'Customer')
+                    <x-responsive-nav-link :href="route('customer_opinions')">
+                        {{ __('Your opinions') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('customer_inquiries')">
+                        {{ __('Your inquiries') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

@@ -12,6 +12,7 @@ use App\Models\ProfileImage;
 use App\Models\PetsitterServices;
 use App\Models\Service;
 use App\Models\City;
+use App\Models\Opinion;
 
 class ProfileController extends Controller
 {
@@ -151,25 +152,103 @@ class ProfileController extends Controller
      */
     public function index(Request $request) {
 
-        // $user = User::all();
-        // $inquiries = Inquiry::all();
-        // $latestUser = User::get()->last();
-        // $latestInquiries = Inquiry::latest()->take(5)->get();
-
         $users = User::all() ?? [];
         $inquiries = Inquiry::all() ?? [];
         $latestUser = User::get()->last();
         $latestInquiries = Inquiry::latest()->take(5)->get() ?? [];
         $latestInquiryUser = Inquiry::get()->last() ? User::find(Inquiry::get()->last()->petsitter_id) : null;
+        $latestOpinions = Opinion::latest()->take(5)->get() ?? [];
+        $latestOpinionUser = Inquiry::get()->last() ? User::find(Inquiry::get()->last()->petsitter_id) : null;
+
+        $customerInquiries = Inquiry::where('customer_id', auth()->user()->id) ?? [];
+        $customerInquiriesNumber = $customerInquiries->count();
+        $customerOpinions = Opinion::where('customer_id', auth()->user()->id) ?? [];
+        $customerOpinionsNumber = $customerOpinions->count();
 
 
         return view('dashboard', [
-            // 'users' => User::latest()->filter(request(['tag', 'search']))->paginate(4)
             'users' => $users,
             'inquiries' => $inquiries,
             'latestUser' => $latestUser,
             'latestInquiries' => $latestInquiries,
-            'latestInquiryUser' => $latestInquiryUser
+            'latestInquiryUser' => $latestInquiryUser,
+            'latestOpinions' => $latestOpinions,
+            'latestOpinionUser' => $latestOpinionUser,
+            'customerInquiriesNumber' => $customerInquiriesNumber,
+            'customerInquiries' => $customerInquiries,
+            'customerOpinionsNumber' => $customerOpinionsNumber
         ]);
     }
+
+    /**
+     * Display list of customer's opinions.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function customer_opinions(Request $request) {
+        $opinions = Opinion::where('customer_id', auth()->user()->id)->get() ?? [];
+
+        return view('customer_opinions.index', [
+            'opinions' => $opinions 
+        ]);
+    }
+
+    /**
+     * Display the customer's specified opinion.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function customer_opinion($id)
+    {
+        $opinion = Opinion::find($id);
+        $petsitter = User::find($opinion->petsitter_id);
+        $customer = User::find($opinion->customer_id);
+
+        return view('customer_opinions.show', [
+            'opinion' => $opinion,
+            'petsitter' => $petsitter,
+            'customer' => $customer
+        ]);
+    }
+
+    /**
+     * Display list of customer's inquiries.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function customer_inquiries(Request $request) {
+        $inquiries = Inquiry::where('customer_id', auth()->user()->id)->get() ?? [];
+
+        return view('customer_inquiries.index', [
+            'inquiries' => $inquiries 
+        ]);
+    }
+
+    /**
+     * Display the customer's specified inquiry.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function customer_inquiry($id)
+    {
+        $inquiry = Inquiry::find($id);
+        $petsitter = User::find($inquiry->petsitter_id);
+        $customer = User::find($inquiry->customer_id);
+        $city = City::find($inquiry->city_id);
+        $service = City::find($inquiry->service_id);
+
+        return view('customer_inquiries.show', [
+            'inquiry' => $inquiry,
+            'petsitter' => $petsitter,
+            'customer' => $customer,
+            'city' => $city,
+            'service' => $service
+        ]);
+    }
+
+
 }

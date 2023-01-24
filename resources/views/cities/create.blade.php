@@ -22,27 +22,36 @@
 
     <form method="post" action="{{ route('cities.store') }}">
         @csrf
+        
         <div class="mt-2">    
-            <label for="name" class="block font-medium text-sm text-gray-700">{{ __('City name') }}</label>
-            <input type="text" class="border-gray-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-md shadow-sm mt-1 block w-full" name="name"/>
+            <x-input-text-form 
+                label="City name"
+                name="name" 
+            />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
-        <div class="mt-2">
-            <label for="country" class="block font-medium text-sm text-gray-700">{{ __('Country') }}</label>
-            <input type="text" class="border-gray-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-md shadow-sm mt-1 block w-full" name="country"/>
+        <div class="mt-2">    
+            <x-input-text-form 
+                label="Country"
+                name="country" 
+            />
             <x-input-error :messages="$errors->get('country')" class="mt-2" />
         </div>
 
-        <div class="mt-2">
-            <label for="province" class="block font-medium text-sm text-gray-700">{{ __('Province') }}</label>
-            <input type="text" class="border-gray-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-md shadow-sm mt-1 block w-full" name="province"/>
+        <div class="mt-2">    
+            <x-input-text-form 
+                label="Province"
+                name="province" 
+            />
             <x-input-error :messages="$errors->get('province')" class="mt-2" />
         </div>
 
-        <div class="mt-2">
-            <label for="zip_code" class="block font-medium text-sm text-gray-700">{{ __('Postal code') }}</label>
-            <input type="text" class="border-gray-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-md shadow-sm mt-1 block w-full" name="zip_code"/>
+        <div class="mt-2">    
+            <x-input-text-form 
+                label="Postal code"
+                name="zip_code" 
+            />
             <x-input-error :messages="$errors->get('zip_code')" class="mt-2" />
         </div>
 

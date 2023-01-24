@@ -15,16 +15,17 @@ class OpinionController extends Controller
      */
     public function index(Request $request)
     {
-        // $inquiry = Inquiry::with('service')->first();
-
         if($request->filled('search')) {
             $search = $request->input('search');
 
             $opinions = Opinion::query()
-                ->join('users', 'opinions.petsitter_id', '=', 'users.id')
-                ->join('users', 'opinions.customer_id', '=', 'users.id')
-                ->select('opinions.*')
-                ->where('users.name', 'LIKE', "%{$search}%")
+                ->join('users as customer', 'opinions.customer_id', '=', 'customer.id')
+                ->join('users as petsitter', 'opinions.petsitter_id', '=', 'petsitter.id')
+                ->select('opinions.*', 'customer.name as customer_name', 'petsitter.name as petsitter_name')
+                ->where(function($query) use ($search) {
+                    $query->where('customer.name', 'LIKE', "%{$search}%")
+                        ->orWhere('petsitter.name', 'LIKE', "%{$search}%");
+                    })
                 ->paginate(10);
 
         } else {
@@ -41,7 +42,17 @@ class OpinionController extends Controller
      */
     public function create()
     {
-        return view('opinions.create'); // -> resources/views/opinions/create.blade.php
+        $petsitters = User::where('role', 'Petsitter')->where('status', 'Published')->get();
+        $customers = User::where('role', 'Customer')->where('status', 'Published')->get();
+        $statuses = ['Pending', 'Published'];
+        $scores = [1, 2, 3, 4, 5];
+
+        return view('opinions.create', [
+            'petsitters' => $petsitters,
+            'customers' => $customers,
+            'statuses' => $statuses,
+            'scores' => $scores
+        ]); // -> resources/views/opinions/create.blade.php
     }
  
     /**
@@ -58,7 +69,8 @@ class OpinionController extends Controller
                 'text' => 'required',
                 'score' => 'required',
                 'petsitter_id' => 'required',
-                'customer_id' => 'required'
+                'customer_id' => 'required',
+                'status' => 'required'
             ],
             [   
                 'required' => 'This field cannot be empty',
@@ -71,6 +83,7 @@ class OpinionController extends Controller
         $opinion->score = $request->get('score');
         $opinion->petsitter_id = $request->get('petsitter_id');
         $opinion->customer_id = $request->get('customer_id');
+        $opinion->status = $request->get('status');
         $opinion->save();
  
         return redirect('/opinions')->with('success', 'New inquiry created');   // -> resources/views/opinions/index.blade.php
@@ -84,7 +97,15 @@ class OpinionController extends Controller
      */
     public function show($id)
     {
-        return view('opinions.show', ['opinion' => Opinion::find($id)]);
+        $opinion = Opinion::find($id);
+        $petsitter = User::find($opinion->petsitter_id);
+        $customer = User::find($opinion->customer_id);
+
+        return view('opinions.show', [
+            'opinion' => $opinion,
+            'petsitter' => $petsitter,
+            'customer' => $customer
+        ]);
     }
  
     /**

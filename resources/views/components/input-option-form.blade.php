@@ -1,8 +1,7 @@
 <label class="block font-medium text-sm text-gray-700" for="status">{{ __($label) }}</label>            
 <div class="flex justify-left" style="margin-top: 0 !important">
-    <div class="xl:w-96">
+    <div class="w-full">
     <select class="form-select appearance-none
-        block
         w-full
         text-base
         font-normal

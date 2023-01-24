@@ -27,12 +27,16 @@ class InquiryController extends Controller
             $inquiries = Inquiry::query()
                 ->join('services', 'inquiries.service_id', '=', 'services.id')
                 ->join('cities', 'inquiries.city_id', '=', 'cities.id')
-                ->join('users', 'inquiries.petsitter_id', '=', 'users.id')
-                ->select('inquiries.*')
-                ->where('services.name', 'LIKE', "%{$search}%")
+                ->join('users as petsitter', 'inquiries.petsitter_id', '=', 'petsitter.id')
+                ->join('users as customer', 'inquiries.customer_id', '=', 'customer.id')
+                ->select('inquiries.*', 'services.name as service_name', 'cities.name as city_name', 'petsitter.name as petsitter_name', 'customer.name as customer_name')
+                ->where(function($query) use ($search) {
+            $query->where('services.name', 'LIKE', "%{$search}%")
                 ->orWhere('cities.name', 'LIKE', "%{$search}%")
-                ->orWhere('users.name', 'LIKE', "%{$search}%")
-                ->paginate(10);
+                ->orWhere('petsitter.name', 'LIKE', "%{$search}%")
+                ->orWhere('customer.name', 'LIKE', "%{$search}%");
+            })
+            ->paginate(10);
 
         } else {
             $inquiries = Inquiry::paginate(10);
@@ -48,7 +52,17 @@ class InquiryController extends Controller
      */
     public function create()
     {
-        return view('inquiries.create'); // -> resources/views/inquiries/create.blade.php
+        $services = Service::all();
+        $cities = City::all();
+        $petsitters = User::where('role', 'Petsitter')->where('status', 'Published')->get();
+        $customers = User::where('role', 'Customer')->where('status', 'Published')->get();
+
+        return view('inquiries.create', [
+            'services' => $services,
+            'cities' => $cities,
+            'petsitters' => $petsitters,
+            'customers' => $customers
+        ]); // -> resources/views/inquiries/create.blade.php
     }
  
     /**

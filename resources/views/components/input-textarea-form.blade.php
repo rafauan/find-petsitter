@@ -21,4 +21,4 @@
     rows="3"
     required="required"
     placeholder="{{__($placeholder)}}"
->{{ __('Your account description') }}</textarea>
+></textarea>

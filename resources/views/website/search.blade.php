@@ -49,28 +49,22 @@
             @csrf
             
             <div class="mt-2">
-                <label for="city_id" class="block mb-2 font-medium text-sm text-gray-700">{{ __('City') }}</label>
-                <select id="city_id" class="
-                    bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
-                    aria-label="city_id" name="city_id" id="city_id" required="required" autofocus="autofocus" autocomplete="city_id"    
-                >
-                    @foreach ($cities as $city)
-                        <option value="{{ $city->id }}">{{ $city->name }}</option>
-                    @endforeach
-                </select>
-                <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
+              <x-input-option-form
+                  label="City"
+                  name="city_id"
+                  :options="$cities"
+                  :extendedOption="true"
+              />
+              <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
             </div>
 
             <div class="mt-2">
-              <label for="service_id" class="block mb-2 font-medium text-sm text-gray-700">{{ __('City') }}</label>
-              <select id="service_id" class="
-                  bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-700 focus:border-emerald-700 block w-full p-2.5"
-                  aria-label="service_id" name="service_id" id="service_id" required="required" autofocus="autofocus" autocomplete="service_id"    
-              >
-                  @foreach ($services as $service)
-                      <option value="{{ $service->id }}">{{ $service->name }}</option>
-                  @endforeach
-              </select>
+              <x-input-option-form
+                  label="Services"
+                  name="service_id"
+                  :options="$services"
+                  :extendedOption="true"
+              />
               <x-input-error :messages="$errors->get('service_id')" class="mt-2" />
             </div>
     

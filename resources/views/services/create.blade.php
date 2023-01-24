@@ -23,8 +23,10 @@
     <form method="post" action="{{ route('services.store') }}">
         @csrf
         <div class="mt-2">    
-            <label for="name" class="block font-medium text-sm text-gray-700">{{ __('Service name') }}</label>
-            <input type="text" class="border-gray-300 focus:border-emerald-700 focus:ring-emerald-700 rounded-md shadow-sm mt-1 block w-full" name="name"/>
+            <x-input-text-form 
+                label="Service name"
+                name="name" 
+            />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 

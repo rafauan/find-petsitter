@@ -11,6 +11,7 @@ use App\Models\ProfileImage;
 use App\Models\Inquiry;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\NewInquiryMail;
+use App\Mail\NewOpinionMail;
 use Illuminate\Support\Facades\Mail;
 
 class WebsiteController extends Controller
@@ -49,6 +50,8 @@ class WebsiteController extends Controller
             })
         ->get();
 
+        $users_count = count($users) ?? 0;
+
         $city = City::find($city_id);
         $other_cities = City::where('id', '!=', $city_id)->get();
                 
@@ -60,7 +63,8 @@ class WebsiteController extends Controller
             'city' => $city,
             'other_cities' => $other_cities,
             'service' => $service,
-            'other_services' => $other_services
+            'other_services' => $other_services,
+            'users_count' => $users_count
         ]); // -> resources/views/website/search_results.blade.php
     }
 
@@ -70,7 +74,10 @@ class WebsiteController extends Controller
      */
     public function show_profile($id) 
     {
-        $user = User::with('petsitter_services.service', 'opinions')->find($id);
+        $user = User::with(['petsitter_services.service', 'opinions' => function($query) {
+            $query->where('status', 'Published');
+        }])->find($id);
+
         $city = City::find($user->city_id);
 
         $profile_image = ProfileImage::where('user_id', $user->id)->first();
@@ -169,7 +176,14 @@ class WebsiteController extends Controller
         $opinion->score = $request->get('score');
         $opinion->petsitter_id = $request->get('id');
         $opinion->customer_id = Auth::id();
+        $opinion->status = 'Pending';
         $opinion->save();
+
+        $petsitter = User::find($opinion->petsitter_id);
+        $customer = User::find($opinion->customer_id);
+        $url = "http://localhost";
+
+        Mail::to($petsitter->email)->send(new NewOpinionMail($customer->name, $customer->email, $url));
 
         return redirect()->route('website.add_opinion', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
 
