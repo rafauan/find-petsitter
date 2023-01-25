@@ -124,6 +124,7 @@ class WebsiteController extends Controller
         $inquiry->message = $request->get('message');
         $inquiry->petsitter_id = $request->get('id');
         $inquiry->customer_id = Auth::id();
+        $inquiry->status = 'New';
         $inquiry->save();
 
         $petsitter = User::find($request->get('id'));

@@ -33,13 +33,13 @@
                                     {{ __('Age') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
-                                    {{ __('Message') }}
-                                </th>
-                                <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
                                     {{ __('Petsitter') }}
                                 </th>
                                 <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
                                     {{ __('Creation date') }}
+                                </th>
+                                <th scope="col" class="text-sm font-semibold text-gray-900 px-6 py-4 text-left">
+                                    {{ __('Status') }}
                                 </th>
                             </tr>
                         </thead>
@@ -84,9 +84,6 @@
                                     @endif
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    {{ Str::limit($inquiry->message, 25, '...') }}
-                                </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                     @php 
                                         $petsitter = App\Models\User::find($inquiry->petsitter_id);
                                     @endphp 
@@ -95,6 +92,21 @@
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                     {{ $inquiry->created_at }}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                    @if($inquiry->status == 'New')
+                                        <span class="bg-blue-400 text-white py-2 px-2 rounded">
+                                            {{ __($inquiry->status) }}
+                                        </span>
+                                    @elseif($inquiry->status == 'Rejected')
+                                        <span class="bg-red-400 text-white py-2 px-2 rounded">
+                                            {{ __($inquiry->status) }}
+                                        </span>
+                                    @elseif($inquiry->status == 'Approved')
+                                        <span class="bg-emerald-400 text-white py-2 px-2 rounded">
+                                            {{ __($inquiry->status) }}
+                                        </span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

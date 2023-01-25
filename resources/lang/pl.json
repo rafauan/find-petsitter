@@ -175,5 +175,15 @@
     "Go to": "Przejdź do",
     "search engine": "wyszukiwarki",
     "to find the right petsitter": "aby znaleźć odpowiedniego opiekuna",
-    "No opinions have been added yet": "Nie dodałeś jeszcze żadnych opinii"
+    "No opinions have been added yet": "Nie dodałeś jeszcze żadnych opinii",
+    "Petsitter received a message about your inquiry. When he/she responds we will notify you by email": "Opiekun dostał wiadomość o Twoim zapytaniu. Kiedy odpowie powiadomimy Cię drogą mailową",
+    "Your inquiry has a status of new": "Twoje zapytanie ma status nowy",
+    "Your request has been approved": "Twoje zapytanie zostało zatwierdzone",
+    "Check the feedback message below for details": "Sprawdź wiadomość zwrotną poniżej aby dowiedzieć się o szczegółach",
+    "Feedback message": "Wiadomość zwrotna",
+    "Approved": "Zatwierdzony",
+    "Rejected": "Odrzucony",
+    "New": "Nowy",
+    "Your request has been rejected": "Twoje zapytanie zostało odrzucone",
+    "Unfortunately, but your request was rejected. Check the feedback message": "Niestety, ale Twoje zapytanie zostało odrzucone. Sprawdź wiadmość zwrotną"
 }

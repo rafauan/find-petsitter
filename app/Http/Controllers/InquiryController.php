@@ -98,6 +98,7 @@ class InquiryController extends Controller
         $inquiry->message = $request->get('message');
         $inquiry->petsitter_id = $request->get('petsitter_id');
         $inquiry->customer_id = $request->get('customer_id');
+        $inquiry->status = 'New';
         $inquiry->save();
  
         return redirect('/inquiries')->with('success', 'New inquiry created');   // -> resources/views/inquiries/index.blade.php

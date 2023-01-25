@@ -9,6 +9,32 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
     
         <div class="p-4 my-6 sm:p-8 bg-white shadow sm:rounded-lg">
+
+            @if($inquiry->status == 'New')
+            <div class="mb-4">
+                <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mt-6" role="alert">
+                    <p class="font-bold">{{ __('Your inquiry has a status of new') }}</p>
+                    <p>{{ __('Petsitter received a message about your inquiry. When he/she responds we will notify you by email') }}</p>
+                </div>
+            </div>
+
+            @elseif($inquiry->status == "Approved")
+                <div class="mb-4">
+                    <div class="bg-emerald-100 border-l-4 border-emerald-500 text-emerald-700 p-4 mt-6" role="alert">
+                        <p class="font-bold">{{ __('Your request has been approved') }}</p>
+                        <p>{{ __('Check the feedback message below for details') }}</p>
+                    </div>
+                </div>
+
+            @elseif($inquiry->status == "Rejected")
+                <div class="mb-4">
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-6" role="alert">
+                        <p class="font-bold">{{ __('Your request has been rejected') }}</p>
+                        <p>{{ __('Unfortunately, but your request was rejected. Check the feedback message') }}</p>
+                    </div>
+                </div>
+            @endif
+
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
                     {{ __('Service name') }}
@@ -73,10 +99,12 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Message') }}
+                    {{ __('Your message') }}
                 </h5>
                 <p>
-                    {{ $inquiry->message }}
+                    <div class="text-gray-700 p-4 rounded bg-gray-100 border-gray-300 border">
+                        <p>{{ $inquiry->message }}</p>  
+                    </div>
                 </p>
             </div>
 
@@ -94,6 +122,17 @@
                     </a>    
                 </p>
             </div>
+
+            @if($inquiry->status == "Approved" || $inquiry->status == "Rejected")
+            <div class="mb-4">
+                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
+                    {{ __('Feedback message') }}
+                </h5>
+                <div class="text-gray-700 p-4 rounded bg-gray-100 border-gray-300 border">
+                    <p>{{ $inquiry->feedback_message }}</p>  
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
