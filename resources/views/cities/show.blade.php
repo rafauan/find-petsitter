@@ -107,7 +107,6 @@
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-4 text-gray-800">
                     {{ __('Map') }}
                 </h5>
-                @include('components.google-maps', ['city' => $city->name])
             </div>
 
 

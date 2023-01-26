@@ -216,7 +216,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Rafał Antochowski',
             'email' => 'admin@findpetsitter.pl',
-            'password' => Hash::make('passwd'),
+            'password' => Hash::make('password134'),
             'created_at' => date('Y-m-d h:s'),
             'updated_at' => date('Y-m-d h:s'),
             'status' => 'Published',
@@ -226,7 +226,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Jan Kowalski',
             'email' => 'petsitter@test.com',
-            'password' => Hash::make('passwd'),
+            'password' => Hash::make('password134'),
             'created_at' => date('Y-m-d h:s'),
             'updated_at' => date('Y-m-d h:s'),
             'status' => 'Published',
@@ -237,7 +237,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Kacper Nowak',
             'email' => 'customer@test.com',
-            'password' => Hash::make('passwd'),
+            'password' => Hash::make('password134'),
             'created_at' => date('Y-m-d h:s'),
             'updated_at' => date('Y-m-d h:s'),
             'status' => 'Published',
