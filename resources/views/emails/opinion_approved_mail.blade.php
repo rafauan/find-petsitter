@@ -94,21 +94,19 @@ a {
         <tr>
             <td>
                 <h1>Witaj!</h1>
-                <p>W systemie zarejestrował się nowy użytkownik.<br/></p>
+                <p>Na Twoim profilu pojawiła się nowa opinia.<br/></p>
                 <p>
+                    Szczegóły klienta: <br/>
                     Imię: {{ $user_name }} <br/>
                     E-mail: {{ $user_email }} <br/>
-                    @if($user_role == 'Customer') 
-                        Typ konta: klient
-                    @else
-                        Typ konta: {{ $user_role }}
-                    @endif
                 </p>
             </td>
         </tr>
         <tr>
             <td class="td_button">
-                <a class="button" href="{{ url("/users/$user_id") }}">Potwierdź konto użytkownika</a>
+                <a class="button" href="{{ $url }}">
+                    Zobacz szczegóły
+                </a>
             </td>
         </tr>
     </table>

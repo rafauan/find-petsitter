@@ -94,7 +94,7 @@ a {
         <tr>
             <td>
                 <h1>Witaj!</h1>
-                <p>Pojawiła się nowa opinia na Twoim profilu.<br/></p>
+                <p>Klient wystawił nową opinie opiekunowi.<br/></p>
                 <p>
                     Szczegóły klienta: <br/>
                     Imię: {{ $user_name }} <br/>

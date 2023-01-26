@@ -13,6 +13,9 @@ use App\Models\PetsitterServices;
 use App\Models\Service;
 use App\Models\City;
 use App\Models\Opinion;
+use App\Mail\InquiryAnswerMail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserChangeDataMail;
 
 class ProfileController extends Controller
 {
@@ -115,6 +118,14 @@ class ProfileController extends Controller
         }
 
         $request->user()->status = 'Draft';
+
+        $admins = User::where('role', 'Admin')->get();
+        $user = $request->user();
+        $url = url('/users/' . $user->id);
+
+        foreach($admins as $admin) {
+            Mail::to($admin->email)->send(new UserChangeDataMail($user->name, $user->email, $url));
+        }
 
         $request->user()->save();
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
@@ -358,7 +369,14 @@ class ProfileController extends Controller
         $inquiry->feedback_message = $request['feedback_message'];
         $inquiry->save();
 
-        return redirect()->route('petsitter_inquiry', ['id' => $inquiry->id])->with('success', 'success');
+        $url = url('/customer_inquiries/' . $inquiry->id);
+
+        $customer = User::find($inquiry->customer_id);
+        $petsitter = User::find($inquiry->petsitter_id);
+
+        Mail::to($customer->email)->send(new InquiryAnswerMail($petsitter->name, $petsitter->email, $url));
+
+        return redirect()->route('petsitter_inquiry', ['id' => $inquiry->id])->with('success');
     }
 
 }

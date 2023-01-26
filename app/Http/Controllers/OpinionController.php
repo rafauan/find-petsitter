@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Opinion;
 use App\Models\User;
+use App\Mail\OpinionApprovedMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class OpinionController extends Controller
 {
@@ -163,6 +166,15 @@ class OpinionController extends Controller
         $opinion->customer_id = $request->get('customer_id');
         $opinion->status = $request->get('status');
         $opinion->save();
+
+        $petsitter = User::find($opinion->petsitter_id);
+        $customer = User::find($opinion->customer_id);
+
+        $url = url('/petsitter_opinions/' . $opinion->id);
+
+        if($request->get('status') == 'Published') {
+            Mail::to($petsitter->email)->send(new OpinionApprovedMail($customer->name, $customer->email, $url));
+        } 
 
         return redirect()->route('opinions.show', ['opinion' => Opinion::find($id)])->with('success', __('Opinion updated'));
     }

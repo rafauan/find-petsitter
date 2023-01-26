@@ -6,21 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewOpinionMail extends Mailable
+class AdminApprovedChangesMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user_name, $user_email, $url;
+    public $url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user_name, $user_email, $url)
+    public function __construct($url)
     {
-        $this->user_name = $user_name;
-        $this->user_email = $user_email;
         $this->url = $url;
     }
 
@@ -31,8 +29,8 @@ class NewOpinionMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('FindPetsitter - pojawiła się nowa opinia')
+        return $this->subject('FindPetsitter - administrator zatwierdził Twoje dane')
                     ->from('contact@findpetsitter.pl')
-                    ->view('emails.new_opinion_mail');
+                    ->view('emails.admin_approved_changes_mail');
     }
 }

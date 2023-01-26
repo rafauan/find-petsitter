@@ -10,7 +10,8 @@ use App\Models\PetsitterServices;
 use App\Models\ProfileImage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-
+use App\Mail\AdminApprovedChangesMail;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -266,6 +267,10 @@ class UserController extends Controller
                 $petsitter_service = PetsitterServices::where('petsitter_id', $user->id)->where('service_id', $user_service)->get();
                 $petsitter_service->each->delete();
             }
+        }
+
+        if($request->get('status') == 'Published') {
+            Mail::to($user->email)->send(new AdminApprovedChangesMail(url('/dashboard')));
         }
  
         return redirect()->route('users.show', ['user' => User::find($id)])->with('success', __('User updated'));

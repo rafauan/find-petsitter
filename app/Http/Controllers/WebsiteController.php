@@ -130,12 +130,12 @@ class WebsiteController extends Controller
         $petsitter = User::find($request->get('id'));
         $customer = User::find(Auth::id());
 
-        $url = url("/your_inquiry_petsitter/$inquiry->id");
+        $url = url("/petsitter_inquiries/$inquiry->id");
 
         Mail::to($petsitter->email)->send(new NewInquiryMail($customer->name, $customer->email, $url));
 
-        // Przekieruj z powrotem do strony /show_profile/{id} i wyświetl komunikat
-        return redirect()->route('website.show_profile', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
+        return redirect()->route('website.show_profile', ['id' => $request->get('id')])
+                ->withInput(['id' => $inquiry->id])->with('success', 'Success!');
     }
 
     /**
@@ -180,11 +180,14 @@ class WebsiteController extends Controller
         $opinion->status = 'Pending';
         $opinion->save();
 
-        $petsitter = User::find($opinion->petsitter_id);
         $customer = User::find($opinion->customer_id);
-        $url = "http://localhost";
 
-        Mail::to($petsitter->email)->send(new NewOpinionMail($customer->name, $customer->email, $url));
+        $url = url('/opinions/' . $opinion->id);
+        $admins = User::where('role', 'Admin')->get();
+
+        foreach($admins as $admin) {
+            Mail::to($admin->email)->send(new NewOpinionMail($customer->name, $customer->email, $url));
+        }
 
         return redirect()->route('website.add_opinion', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
     }

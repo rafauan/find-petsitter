@@ -172,6 +172,7 @@
             </div>
             @endif
 
+            @if($user->role == 'Petsitter')
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
                     {{ __('Profile description') }}
@@ -180,6 +181,7 @@
                     {{ $user->profile_description }}
                 </p>
             </div>
+            @endif
 
         </div>
 

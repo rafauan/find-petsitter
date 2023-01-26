@@ -17,7 +17,7 @@
         @csrf
         @method('patch')
 
-        @if(Auth::user()->status == 'Draft')
+        @if(Auth::user()->status == 'Draft' && Auth::user()->role != 'Admin')
         <div class="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 mt-6" role="alert">
             <p class="font-bold">{{ __('Your account is awaiting Admin approval.') }}</p>
             <p>{{ __("Your account is in 'Draft' status, we will inform you when the administrator approves your data.") }}</p>

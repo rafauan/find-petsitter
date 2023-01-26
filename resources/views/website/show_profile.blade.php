@@ -63,7 +63,7 @@
           <div class="bg-emerald-100 border-l-4 border-emerald-500 text-emerald-700 p-4 mt-6" role="alert">
             <p>
               Zapytanie zostało wysłane, aby przejrzeć szczegóły zapytania wejdź pod ten 
-              <a href="#" class="font-bold hover:opacity-75 transition ease-in-out duration-150">link.</a>
+              <a href="{{ url('/customer_inquiries/' . old('id')) }}" class="font-bold hover:opacity-75 transition ease-in-out duration-150">link.</a>
             </p>
           </div>
         @else 

@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewOpinionMail extends Mailable
+class UserChangeDataMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -31,8 +31,8 @@ class NewOpinionMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('FindPetsitter - pojawiła się nowa opinia')
+        return $this->subject('FindPetsitter - użytkownik zmienił swoje dane')
                     ->from('contact@findpetsitter.pl')
-                    ->view('emails.new_opinion_mail');
+                    ->view('emails.user_change_data_mail');
     }
 }
