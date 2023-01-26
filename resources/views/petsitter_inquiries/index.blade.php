@@ -114,7 +114,7 @@
                         @else
                             <div class="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 mt-6" role="alert">
                                 <p class="font-bold">{{ __("It looks like you don't have any queries yet") }}</p>
-                                <p>{{ __("Go to") }} <a href="/search" class="font-bold hover:opacity-75 transition ease-in-out duration-150">{{ __("search engine") }}</a> {{ __("to find the right petsitter")}}.</p>
+                                <p>{{ __('If there are new inquiries we will notify you in an email and here are the inquiries that will appear') }}</p>
                             </div>
                         @endunless
 
