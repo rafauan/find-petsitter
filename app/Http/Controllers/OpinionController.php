@@ -29,7 +29,7 @@ class OpinionController extends Controller
                 ->paginate(10);
 
         } else {
-            $opinions = Opinion::paginate(10);
+            $opinions = Opinion::with('petsitter', 'customer')->paginate(10);
         }
         
         return view('opinions.index', compact('opinions')); // -> resources/views/opinions/index.blade.php 
