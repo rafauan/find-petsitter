@@ -7,9 +7,9 @@
       <div class="col shadow-lg">
         <a href="/show_profile/{{ $user->id }}" class="hover:opacity-60 transition">
           @if($user->profile_image)
-            <img class="w-full" src="{{ Storage::url($user->profile_image->path) }}" alt="Profile picture">
+            <img class="w-full aspect-square" style="object-fit: cover;" src="{{ Storage::url($user->profile_image->path) }}" alt="Profile picture">
           @else
-            <img class="w-full" src="{{ asset('storage/profile_images/blank_profile_picture.png') }}" alt="Profile picture">
+            <img class="w-full aspect-square" style="object-fit: cover;" src="{{ asset('storage/profile_images/blank_profile_picture.png') }}" alt="Profile picture">
           @endif
           <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">
