@@ -38,6 +38,15 @@ Route::middleware('verified')->group(function () {
 
     Route::get('/customer_inquiries', [ProfileController::class, 'customer_inquiries'])->name('customer_inquiries');
     Route::get('/customer_inquiries/{id}', [ProfileController::class, 'customer_inquiry'])->name('customer_inquiry');
+
+    Route::get('/petsitter_opinions', [ProfileController::class, 'petsitter_opinions'])->name('petsitter_opinions');
+    Route::get('/petsitter_opinions/{id}', [ProfileController::class, 'petsitter_opinion'])->name('petsitter_opinion');
+
+    Route::get('/petsitter_inquiries', [ProfileController::class, 'petsitter_inquiries'])->name('petsitter_inquiries');
+    Route::get('/petsitter_inquiries/{id}', [ProfileController::class, 'petsitter_inquiry'])->name('petsitter_inquiry');
+
+    Route::get('/petsitter_inquiries/{id}/answer', [ProfileController::class, 'answer_to_inquiry'])->name('answer_to_inquiry');
+    Route::patch('/send_answer/{id}', [ProfileController::class, 'send_answer'])->name('send_answer');
 });
 
 Route::get('/search', 'WebsiteController@search')->name('website.search');

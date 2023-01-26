@@ -187,7 +187,5 @@ class WebsiteController extends Controller
         Mail::to($petsitter->email)->send(new NewOpinionMail($customer->name, $customer->email, $url));
 
         return redirect()->route('website.add_opinion', ['id' => $request->get('id')])->with('success', 'Zapytanie zostało wysłane');
-
-        dd($opinion);
     }
 }

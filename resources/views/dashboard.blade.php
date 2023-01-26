@@ -174,6 +174,21 @@
                                     </div>
                                 </div>
                             </section>
+                        @elseif(Auth::user()->role == 'Petsitter')
+                            <section class="text-gray-600 body-font">
+                                <div class="container px-5 py-12 mx-auto">
+                                    <div class="flex flex-wrap -m-4 text-center">
+                                        <div class="p-4 w-1/2">
+                                            <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">{{ $petsitterInquiriesNumber }}</h2>
+                                            <p class="leading-relaxed">{{ __('Your inquiries') }}</p>
+                                        </div>
+                                        <div class="p-4 w-1/2">
+                                            <h2 class="title-font font-medium sm:text-4xl text-3xl text-gray-900">{{ $petsitterOpinionsNumber }}</h2>
+                                            <p class="leading-relaxed">{{ __('Your opinions') }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         @endif
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-@if(Auth::user()->role == 'Customer' && $opinion->customer_id == Auth::user()->id)
+@if(Auth::user()->role == 'Petsitter' && $opinion->petsitter_id == Auth::user()->id)
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -46,16 +46,10 @@
 
             <div class="mb-4">
                 <h5 class="text-2xl font-semibold leading-normal mt-0 mb-2 text-gray-800">
-                    {{ __('Petsitter') }}
+                    {{ __('Customer') }}
                 </h5>
                 <p>
-                    <a 
-                        class="text-emerald-700 hover:text-gray-800 cursor-pointer transition ease-in-out duration-150"
-                        href="/show_profile/{{ $petsitter->id }}"
-                        target="_blank"
-                    >
-                        {{ $petsitter->name }}
-                    </a>     
+                    {{ $customer->name }}
                 </p>
             </div>
         </div>

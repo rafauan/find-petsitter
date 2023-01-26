@@ -79,7 +79,7 @@
         <div class="mt-2" x-show="showService">
             <x-input-fieldset-form 
                 label="Services"
-                name="Services[]"
+                name="services[]"
                 :options="$services"
             />
         </div>

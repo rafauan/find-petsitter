@@ -45,6 +45,15 @@
                         <x-nav-link :href="route('customer_inquiries')" :active="request()->routeIs('customer_inquiries')">
                             {{ __('Your inquiries') }}
                         </x-nav-link>
+                        
+                    @elseif(Auth::user()->role == 'Petsitter')
+                        <x-nav-link :href="route('petsitter_opinions')" :active="request()->routeIs('petsitter_opinions')">
+                            {{ __('Your opinions') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('petsitter_inquiries')" :active="request()->routeIs('petsitter_inquiries')">
+                            {{ __('Your inquiries') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -142,6 +151,14 @@
                     </x-responsive-nav-link>
 
                     <x-responsive-nav-link :href="route('customer_inquiries')">
+                        {{ __('Your inquiries') }}
+                    </x-responsive-nav-link>
+                @elseif(Auth::user()->role = 'Petsitters')
+                    <x-responsive-nav-link :href="route('petsitter_opinions')">
+                        {{ __('Your opinions') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('petsitter_inquiries')">
                         {{ __('Your inquiries') }}
                     </x-responsive-nav-link>
                 @endif

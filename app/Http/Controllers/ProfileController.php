@@ -165,6 +165,10 @@ class ProfileController extends Controller
         $customerOpinions = Opinion::where('customer_id', auth()->user()->id) ?? [];
         $customerOpinionsNumber = $customerOpinions->count();
 
+        $petsitterInquiries = Inquiry::where('petsitter_id', auth()->user()->id) ?? [];
+        $petsitterInquiriesNumber = $petsitterInquiries->count();
+        $petsitterOpinions = Opinion::where('petsitter_id', auth()->user()->id) ?? [];
+        $petsitterOpinionsNumber = $petsitterOpinions->count();
 
         return view('dashboard', [
             'users' => $users,
@@ -176,20 +180,36 @@ class ProfileController extends Controller
             'latestOpinionUser' => $latestOpinionUser,
             'customerInquiriesNumber' => $customerInquiriesNumber,
             'customerInquiries' => $customerInquiries,
-            'customerOpinionsNumber' => $customerOpinionsNumber
+            'customerOpinionsNumber' => $customerOpinionsNumber,
+            'petsitterInquiries' => $petsitterInquiries,
+            'petsitterInquiriesNumber' => $petsitterInquiriesNumber,
+            'petsitterOpinions' => $petsitterOpinions,
+            'petsitterOpinionsNumber' => $petsitterOpinionsNumber
         ]);
     }
 
     /**
      * Display list of customer's opinions.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function customer_opinions(Request $request) {
-        $opinions = Opinion::where('customer_id', auth()->user()->id)->get() ?? [];
+    public function customer_opinions() {
+        $opinions = Opinion::where('customer_id', auth()->user()->id)->latest()->get() ?? [];
 
         return view('customer_opinions.index', [
+            'opinions' => $opinions 
+        ]);
+    }
+
+    /**
+     * Display list of petsitter's opinions.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function petsitter_opinions() {
+        $opinions = Opinion::where('petsitter_id', auth()->user()->id)->latest()->get() ?? [];
+
+        return view('petsitter_opinions.index', [
             'opinions' => $opinions 
         ]);
     }
@@ -214,15 +234,46 @@ class ProfileController extends Controller
     }
 
     /**
+     * Display the petsitter's specified opinion.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function petsitter_opinion($id)
+    {
+        $opinion = Opinion::find($id);
+        $petsitter = User::find($opinion->petsitter_id);
+        $customer = User::find($opinion->customer_id);
+
+        return view('petsitter_opinions.show', [
+            'opinion' => $opinion,
+            'petsitter' => $petsitter,
+            'customer' => $customer
+        ]);
+    }
+
+    /**
      * Display list of customer's inquiries.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function customer_inquiries(Request $request) {
-        $inquiries = Inquiry::where('customer_id', auth()->user()->id)->get() ?? [];
+    public function customer_inquiries() {
+        $inquiries = Inquiry::where('customer_id', auth()->user()->id)->latest()->get() ?? [];
 
         return view('customer_inquiries.index', [
+            'inquiries' => $inquiries 
+        ]);
+    }
+
+    /**
+     * Display list of petsitter's inquiries.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function petsitter_inquiries() {
+        $inquiries = Inquiry::where('petsitter_id', auth()->user()->id)->latest()->get() ?? [];
+
+        return view('petsitter_inquiries.index', [
             'inquiries' => $inquiries 
         ]);
     }
@@ -250,5 +301,64 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Display the petsitter's specified inquiry.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function petsitter_inquiry($id)
+    {
+        $inquiry = Inquiry::find($id);
+        $petsitter = User::find($inquiry->petsitter_id);
+        $customer = User::find($inquiry->customer_id);
+        $city = City::find($inquiry->city_id);
+        $service = City::find($inquiry->service_id);
+
+        return view('petsitter_inquiries.show', [
+            'inquiry' => $inquiry,
+            'petsitter' => $petsitter,
+            'customer' => $customer,
+            'city' => $city,
+            'service' => $service
+        ]);
+    }
+
+    /**
+     * Answer to inquiry as petsitter.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function answer_to_inquiry($id)
+    {
+        $inquiry = Inquiry::find($id);
+        $petsitter = User::find($inquiry->petsitter_id);
+        $customer = User::find($inquiry->customer_id);
+        $answers = ['Approved', 'Rejected'];
+
+        return view('petsitter_inquiries.answer', [
+            'inquiry' => $inquiry,
+            'petsitter' => $petsitter,
+            'customer' => $customer,
+            'answers' => $answers
+        ]);
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function send_answer(Request $request, $id) 
+    {
+        $inquiry = Inquiry::where('id', $id)->first();
+
+        $inquiry->status = $request['answer'];
+        $inquiry->feedback_message = $request['feedback_message'];
+        $inquiry->save();
+
+        return redirect()->route('petsitter_inquiry', ['id' => $inquiry->id])->with('success', 'success');
+    }
 
 }
