@@ -102,14 +102,6 @@
                     {{ $city->created_at }}
                 </p>
             </div>
-
-            <div class="mb-4">
-                <h5 class="text-2xl font-semibold leading-normal mt-0 mb-4 text-gray-800">
-                    {{ __('Map') }}
-                </h5>
-            </div>
-
-
         </div>
 
     </div>
