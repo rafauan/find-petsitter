@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->longText('text');
             $table->integer('score');
-            $table->string('customer_id');
-            $table->string('petsitter_id');
+            $table->foreignId('customer_id')->constrained('users');
+            $table->foreignId('petsitter_id')->constrained('users');
             $table->timestamps();
         });
     }

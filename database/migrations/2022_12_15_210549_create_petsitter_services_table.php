@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('petsitter_services', function (Blueprint $table) {
             $table->id();
-            $table->string('petsitter_id');
-            $table->string('service_id');
+            $table->foreignId('petsitter_id')->constrained('users');
+            $table->foreignId('service_id')->constrained('services');
             $table->timestamps();
         });
     }
